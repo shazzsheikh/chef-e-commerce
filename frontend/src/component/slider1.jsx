@@ -42,7 +42,7 @@ export default function ImageSliderTailwind() {
   ];
 
   return (
-    <section className="w-full bg-[#F2F2F2]/60 md:py-6 py-3">
+    <section className="w-full bg-[#F2F2F2]/60 md:py-4 py-3">
       <div className="w-[85%] mx-auto text-center md:px-4  relative">
         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 mt-6 text-white border rounded-full px-4 sm:px-6 py-2 inline-block bg-[#006699]/60 cursor-pointer">
           Top Products
@@ -72,7 +72,7 @@ export default function ImageSliderTailwind() {
                   <img
                     src={p.img}
                     alt={`Product ${p.id}`}
-                    className="rounded-lg object-cover w-full h-full"
+                    className=" object-cover w-full h-full"
                   />
                   <div
                     className="absolute top-2 right-2 p-1 sm:p-2 cursor-pointer z-10"

@@ -2,11 +2,11 @@ import ProductCard from "../component/card";
 // import  from "../component/card";
 import HeroBanner from "../component/herobanner";
 import ImageSliderTailwind from "../component/slider1";
-
+import { Button } from "@/components/ui/button";
 const Home = () => {
   return (
     <>
-      <div className="md:space-y-6 space-y-2">
+      <div className="md:space-y-6 space-y-2 ">
         <HeroBanner />
         <ImageSliderTailwind />
         <section className="bg-[#fdf6ec]/80 md:py-6 py-3 px-4">
@@ -16,6 +16,9 @@ const Home = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
             <ProductCard />
           </div>{" "}
+          <div className="flex justify-center py-6">
+            <Button variant="outline">View All Products</Button>
+          </div>
         </section>
       </div>
     </>

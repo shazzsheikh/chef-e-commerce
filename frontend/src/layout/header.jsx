@@ -2,6 +2,14 @@ import React from "react";
 import { ShoppingCart, Heart, Search, MapPin, Menu } from "lucide-react";
 import { FaPhoneAlt, FaShoppingCart } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 const Header = () => {
   return (
     <header className="">
@@ -51,9 +59,22 @@ const Header = () => {
         {/* 🔸 Icons */}
         <div className="flex items-center md:px-2 py-1 md:space-x-6 mt-2 md:mt-0">
           {/* Mobile Menu Icon */}
-          <button className="md:hidden block">
-            <Menu className="w-6 h-6" />
-          </button>
+          <Sheet>
+            <SheetTrigger>
+              <button className="md:hidden block">
+                <Menu className="w-6 h-6" />
+              </button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Cart</SheetTitle>
+                <SheetDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account and remove your data from our servers.
+                </SheetDescription>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
 
           {/* Cart Icon */}
           <button className="relative cursor-pointer md:block hidden">
