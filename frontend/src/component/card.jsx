@@ -1,137 +1,66 @@
 import React from "react";
-import { Heart, Star } from "lucide-react";
 
-const items = [
+const products = [
   {
     id: 1,
-    image: "./public/product2.jpg",
-    title: "Wireless Earbuds, IPX8",
-    description:
-      "Organic Cotton, fairtrade certified all good what going on it all you rare rthe lkjklfj",
-    price: 89.0,
-    rating: 4,
+    image: "/images/chef-img-2.jpg",
+    title: "ChefsCloset Basic Bib Apron",
+    review: "lovely",
   },
   {
     id: 2,
-    image: "./public/product2.jpg",
-    title: "Wireless Earbuds, IPX8",
-    description:
-      "Organic Cotton, fairtrade certified all good what going on it all you rare rthe lkjklfj",
-    price: 89.0,
-    rating: 4,
+    image: "/images/chef-img-5.jpg",
+    title: "ChefsCloset Elmwood Cotton Cross Back Apron",
+    review: "Very Pretty",
   },
   {
     id: 3,
-    image: "./public/product2.jpg",
-    title: "Wireless Earbuds, IPX8",
-    description:
-      "Organic Cotton, fairtrade certified all good what going on it all you rare rthe lkjklfj",
-    price: 89.0,
-    rating: 4,
-  },
-  {
-    id: 4,
-    image: "./public/product2.jpg",
-    title: "Wireless Earbuds, IPX8",
-    description:
-      "Organic Cotton, fairtrade certified all good what going on it all you rare rthe lkjklfj",
-    price: 89.0,
-    rating: 4,
-  },
-  {
-    id: 5,
-    image: "./public/product2.jpg",
-    title: "Wireless Earbuds, IPX8",
-    description:
-      "Organic Cotton, fairtrade certified all good what going on it all you rare rthe lkjklfj",
-    price: 89.0,
-    rating: 4,
-  },
-  {
-    id: 6,
-    image: "./public/product2.jpg",
-    title: "Wireless Earbuds, IPX8",
-    description:
-      "Organic Cotton, fairtrade certified all good what going on it all you rare rthe lkjklfj",
-    price: 89.0,
-    rating: 4,
-  },
-  {
-    id: 7,
-    image: "./public/product2.jpg",
-    title: "Wireless Earbuds, IPX8",
-    description:
-      "Organic Cotton, fairtrade certified all good what going on it all you rare rthe lkjklfj",
-    price: 89.0,
-    rating: 4,
-  },
-  {
-    id: 8,
-    image: "./public/product2.jpg",
-    title: "Wireless Earbuds, IPX8",
-    description:
-      "Organic Cotton, fairtrade certified all good what going on it all you rare rthe lkjklfj",
-    price: 89.0,
-    rating: 4,
+    image: "/images/che-img-4.jpg",
+    title: "ChefsCloset Elmwood Towel Ring Cotton Cross Back Apron",
+    review: "A+++++",
   },
 ];
+
 const ProductCard = () => {
   return (
-    <>
-      {items.map((item) => (
-        <div
-          key={item.id}
-          className="relative bg-white rounded-2xl transition flex flex-col border border-gray-200 overflow-hidden"
-        >
-          {/* Wishlist Heart */}
-          <button className="absolute top-3 right-3 text-white hover:text-red-500 cursor-pointer">
-            <Heart size={20} />
-          </button>
-
-          {/* Product Image */}
-          <div className="mb-3 w-full overflow-hidden rounded-sm h-48">
-            <img
-              src={item.image}
-              alt={item.title}
-              className="h-full w-full object-cover"
-            />
-          </div>
-
-          {/* Info */}
-          <div className="px-2 pb-2 flex flex-col flex-grow">
-            <div className="flex items-center justify-between mb-1">
-              <h3 className="md:text-base text-sm font-semibold text-gray-800 mb-1">
+    <section className="w-full px-4 md:px-8 lg:px-16 py-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+        {products.map((item) => (
+          <div
+            key={item.id}
+            className="bg-white  shadow-sm overflow-hidden flex flex-col"
+          >
+            <div className="w-full h-[350px] sm:h-[400px]">
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="p-4 flex flex-col flex-grow">
+              <h3 className="text-red-600 font-semibold border border-red-600 px-2 py-1 inline-block rounded-md text-sm mb-2">
                 {item.title}
               </h3>
-              <span className="md:text-xl text-sm font-bold text-gray-800">
-                ₹ {item.price}
-              </span>
+              <div className="flex items-center text-gray-600 text-sm mb-1">
+                <svg
+                  className="w-4 h-4 text-gray-600 mr-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-4l6-6-1.5-1.5L9 11.5 6.5 9 5 10.5l4 4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Verified Review
+              </div>
+              <p className="text-xl font-bold capitalize">{item.review}</p>
             </div>
-
-            {/* Description */}
-            <p className="text-xs text-gray-500 mb-2">{item.description}</p>
-
-            {/* Rating */}
-            <div className="flex items-center gap-1 mb-3">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  size={16}
-                  className={
-                    i < item.rating
-                      ? "text-green-500 fill-green-500"
-                      : "text-gray-300"
-                  }
-                />
-              ))}
-            </div>
-
-            {/* Button */}
-            <button className="btn-card mt-auto">Add to Cart</button>
           </div>
-        </div>
-      ))}
-    </>
+        ))}
+      </div>
+    </section>
   );
 };
 

@@ -2,7 +2,7 @@ import ProductCard from "../component/card";
 // import  from "../component/card";
 import HeroBanner from "../component/herobanner";
 import ImageSliderTailwind from "../component/slider1";
-import { Button } from "@/components/ui/button";
+
 const Home = () => {
   return (
     <>
@@ -13,12 +13,8 @@ const Home = () => {
           <h2 className="text-5xl sm:text-3xl font-bold text-center mb-4 mt-2 primary-color">
             Our Products
           </h2>{" "}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
             <ProductCard />
           </div>{" "}
-          <div className="flex justify-center py-6">
-            <Button variant="outline">View All Products</Button>
-          </div>
         </section>
       </div>
     </>
