@@ -1,23 +1,33 @@
 const HeroBanner = () => {
   return (
-    <section className="bg-white py-12">
-      <div className="w-[85vw] mx-auto flex flex-col md:flex-row items-center gap-10">
-        
+    <section
+      className="bg-black md:py-12 py-4"
+      style={{
+        backgroundImage: "url('public/images/chef-img-1.png')",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center center",
+        backgroundSize: "cover", // image covers right half only
+      }}
+    >
+      <div className="w-[85vw] max-w-7xl mx-auto flex flex-col md:flex-row items-start md:gap-10 gap-5">
         {/* Left Side - Text */}
-        <div className="flex-1">
-          <h1 className="text-4xl md:text-5xl font-bold leading-snug text-black">
+        <div className="flex-1 max-w-lg text-white">
+          <h1 className="text-4xl md:text-5xl font-bold leading-snug">
             Outfit all your culinary <br /> wardrobe needs
           </h1>
 
-          <ul className="mt-6 space-y-3 text-lg text-gray-800">
+          <ul className="mt-6 space-y-3 text-lg">
             <li className="flex items-center gap-2">
-              <span className="text-green-600 text-xl">✔</span> Textiles you trust
+              <span className="text-green-400 text-xl">✔</span> Textiles you
+              trust
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-green-600 text-xl">✔</span> Traditional and modern designs
+              <span className="text-green-400 text-xl">✔</span> Traditional and
+              modern designs
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-green-600 text-xl">✔</span> Custom embroidery available
+              <span className="text-green-400 text-xl">✔</span> Custom
+              embroidery available
             </li>
           </ul>
 
@@ -26,14 +36,7 @@ const HeroBanner = () => {
           </button>
         </div>
 
-        {/* Right Side - Image */}
-        <div className="flex-1">
-          <img
-            src="/images/chef-img-1.png"
-            alt="Chef cooking"
-            className="w-full rounded-md shadow-lg"
-          />
-        </div>
+        {/* Right side empty, background image is on section */}
       </div>
     </section>
   );

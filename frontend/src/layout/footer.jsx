@@ -172,7 +172,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-gray-700 mt-8 pt-4 text-center text-white text-sm">
-        © {new Date().getFullYear()} Anmol Craft and Creation. All rights
+        © {new Date().getFullYear()} fiber and Creation. All rights
         reserved.
       </div>
     </footer>

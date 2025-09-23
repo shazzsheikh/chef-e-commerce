@@ -1,20 +1,27 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "swiper/css";
+@import "swiper/css/navigation";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --background: oklch(1 0 0);
   /* --foreground: #171717; */
+  /* Arrow icon color (white) */
+  --swiper-navigation-color: #0b92cf;
+  /* Arrow icon size */
+  --swiper-navigation-size: 12px;
+
   --radius: 0.625rem;
   --foreground: oklch(0.13 0.028 261.692);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.13 0.028 261.692);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.13 0.028 261.692);
-  --primary: oklch(0.21 0.034 264.665);
+  --primary: #0b92cf;
   --primary-foreground: oklch(0.985 0.002 247.839);
-  --secondary: oklch(0.967 0.003 264.542);
+  --secondary: #339966;
   --secondary-foreground: oklch(0.21 0.034 264.665);
   --muted: oklch(0.967 0.003 264.542);
   --muted-foreground: oklch(0.551 0.027 264.364);
@@ -61,15 +68,29 @@ body {
   min-height: 80vh;
 }
 
+/* ✅ Positioning */
+.swiper-button-prev,
+.swiper-button-next {
+  width: var(--swiper-navigation-size) !important;
+  height: var(--swiper-navigation-size) !important;
+}
+
 @media (max-width: 600px) {
   .content {
     padding: 5px 0px;
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none !important;
   }
 }
 
 html,
 body {
   overflow-x: hidden;
+}
+.btn-border {
+  @apply border border-gray-300 px-4 py-2 rounded-full font-medium hover:bg-secondary hover:text-white cursor-pointer transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700;
 }
 .btn-card {
   @apply w-fit border border-gray-400 text-black px-4 py-2 rounded-full font-medium hover:bg-[#013f28] hover:text-white cursor-pointer transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700;
@@ -133,9 +154,9 @@ body {
   --card-foreground: oklch(0.985 0.002 247.839);
   --popover: oklch(0.21 0.034 264.665);
   --popover-foreground: oklch(0.985 0.002 247.839);
-  --primary: oklch(0.928 0.006 264.531);
+  --primary: #0b92cf;
   --primary-foreground: oklch(0.21 0.034 264.665);
-  --secondary: oklch(0.278 0.033 256.848);
+  --secondary: #339966;
   --secondary-foreground: oklch(0.985 0.002 247.839);
   --muted: oklch(0.278 0.033 256.848);
   --muted-foreground: oklch(0.707 0.022 261.325);
