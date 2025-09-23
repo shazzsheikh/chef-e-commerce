@@ -3,7 +3,7 @@ const HeroBanner = () => {
     <section
       className="bg-black md:py-12 py-4"
       style={{
-        backgroundImage: "url('public/images/chef-img-1.png')",
+        backgroundImage: "url('/images/chef-img-1.png')",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center center",
         backgroundSize: "cover", // image covers right half only
