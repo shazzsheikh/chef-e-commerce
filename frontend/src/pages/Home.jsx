@@ -2,6 +2,12 @@ import ProductCard from "../component/card";
 // import  from "../component/card";
 import HeroBanner from "../component/herobanner";
 import ImageSliderTailwind from "../component/slider1";
+import Single from "../component/single";
+import Single2 from "../component/single2"
+import Swiper from "../component/swiper";
+import Product2 from "../component/product2"
+import NewArrivals from "../component/newArrival";
+import FAQ from "../component/faqs"
 
 const Home = () => {
   return (
@@ -13,9 +19,13 @@ const Home = () => {
           <h2 className="text-5xl sm:text-3xl font-bold text-center mb-4 mt-2 primary-color">
             Our Products
           </h2>{" "}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
             <ProductCard />
-          </div>{" "}
+            <Single />
+            <Single2 />
+           <Swiper />
+           <Product2/>
+           <NewArrivals/>
+           <FAQ/>
         </section>
       </div>
     </>
