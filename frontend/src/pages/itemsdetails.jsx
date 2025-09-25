@@ -5,7 +5,20 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import ImageSliderTailwind from "@/component/slider1";
+import { useNavigate } from "react-router-dom";
+
+const pants = [
+  { id: "1", img: "/pants/pant1.jpg", name: "Pant 1", price: 250 },
+  { id: "2", img: "/pants/pant2.png", name: "Pant 2", price: 250 },
+  { id: "3", img: "/pants/pant3.jpg", name: "Pant 3", price: 250 },
+  { id: "4", img: "/pants/pant1.jpg", name: "Pant 4", price: 250 },
+  { id: "5", img: "/pants/pant2.png", name: "Pant 5", price: 250 },
+  { id: "6", img: "/pants/pant3.jpg", name: "Pant 6", price: 250 },
+  { id: "7", img: "/pants/pant1.jpg", name: "Pant 7", price: 250 },
+];
 const ItemDetails = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
@@ -65,12 +78,23 @@ const ItemDetails = () => {
             <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition">
               Add to Cart
             </button>
-            <button className="bg-secondary text-white px-6 py-2 rounded-lg hover:bg-secondary-dark transition">
+            <button
+              className="bg-secondary text-white px-6 py-2 rounded-lg hover:bg-secondary-dark transition"
+              onClick={() => {
+                navigate("/checkout");
+              }}
+            >
               buy now
             </button>
           </div>
         </div>
       </div>
+      <ImageSliderTailwind
+        products={pants}
+        title="More Related"
+        showNavigation={true}
+        autoplay={false}
+      />
     </>
   );
 };

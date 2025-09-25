@@ -108,6 +108,9 @@ body {
 .gray-color {
   color: #f5f5f5;
 }
+.checkout-target span {
+  font-size: large;
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

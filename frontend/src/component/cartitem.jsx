@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const CartItem = ({ items }) => {
+const CartItem = ({ items, setopencart }) => {
+  const navigate = useNavigate();
   const [quantities, setQuantities] = useState(() =>
     items.reduce((acc, item) => {
       acc[item.id] = item.quantity || 1;
@@ -67,7 +69,13 @@ const CartItem = ({ items }) => {
           )}
         </span>
       </div>
-      <button className="w-full bg-primary text-white py-3 rounded hover:bg-primary-dark transition">
+      <button
+        className="w-full bg-primary text-white py-3 rounded hover:bg-primary-dark transition"
+        onClick={() => {
+          navigate("/checkout");
+          setopencart(false);
+        }}
+      >
         Checkout
       </button>
     </>

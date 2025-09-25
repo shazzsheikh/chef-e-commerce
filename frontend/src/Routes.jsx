@@ -46,6 +46,7 @@ import {
 } from "react-router-dom";
 import HomeSkeletonLoader from "./components/skelatonloader";
 import ItemDetails from "./pages/itemsdetails";
+import Summarypage from "./pages/summarypage";
 
 // Import shadcn skeleton (adjust import path as per your setup)
 import { Head } from "../Admin/layout/head";
@@ -104,6 +105,7 @@ const AppRoutes = () => {
           <Route path="/" element={<Home />} />
           {/* <Route path="/products" element={<Products />} /> */}
           <Route path="/items/:id" element={<ItemDetails />} />
+          <Route path="/checkout" element={<Summarypage />} />
         </Route>
 
         {/* Protected Admin Routes */}

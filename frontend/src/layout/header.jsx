@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import CartItem from "@/component/cartitem";
 import { Signup } from "../component/signup";
+import { Link } from "react-router-dom";
 
 const items = [
   { id: "1", img: "/pants/pant1.jpg", name: "synthetic pants", price: 250 },
@@ -28,7 +29,7 @@ const items = [
   { id: "4", img: "/shoes/shoes2.jpg", name: "synthetic shoes", price: 350 },
 ];
 const Header = () => {
-  const [showsignup, setshowsignup] = useState(false);
+  const [opencart, setopencart] = useState(false);
   return (
     <header className="">
       <div className="flex md:flex-row flex-col justify-between items-center md:px-8 px-4 py-1 green-bg text-white text-sm">
@@ -57,7 +58,9 @@ const Header = () => {
             alt="Logo"
             className="h-full w-full object-cover"
           /> */}
-          <h1 className="text-2xl text-primary font-bold">CityFab</h1>
+          <Link to="/">
+            <h1 className="text-2xl text-primary font-bold">CityFab</h1>
+          </Link>
         </div>
 
         {/* 🔸 Search Input */}
@@ -96,20 +99,20 @@ const Header = () => {
             </DialogContent>
           </Dialog>
           {/* Mobile Menu Icon */}
-          <Sheet>
+          <Sheet open={opencart} onOpenChange={setopencart}>
             <SheetTrigger>
-              <button className="relative cursor-pointer md:block hidden">
+              <button className="relative cursor-pointer">
                 <ShoppingCart className="w-6 h-6" />
               </button>
-              <button className="md:hidden block">
+              {/* <button className="md:hidden block">
                 <Menu className="w-6 h-6" />
-              </button>
+              </button> */}
             </SheetTrigger>
             <SheetContent side="right" className="w-[95%] md:w-1/2">
               <SheetHeader>
                 <SheetTitle>Cart</SheetTitle>
                 <SheetDescription>
-                  <CartItem items={items} />
+                  <CartItem items={items} setopencart={setopencart} />
                 </SheetDescription>
               </SheetHeader>
             </SheetContent>
