@@ -10,6 +10,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import CartItem from "@/component/cartitem";
+
+const items = [
+  { id: "1", img: "/pants/pant1.jpg", name: "synthetic pants", price: 250 },
+  { id: "2", img: "/pants/pant3.jpg", name: "synthetic pants", price: 250 },
+  { id: "3", img: "/shirt/shirt1.jpg", name: "synthetic shirt", price: 150 },
+  { id: "4", img: "/shoes/shoes2.jpg", name: "synthetic shoes", price: 350 },
+
+];
 const Header = () => {
   return (
     <header className="">
@@ -33,12 +42,13 @@ const Header = () => {
       </div>
       <nav className="primary-color md:px-8 px-2 pt-2 flex md:flex-row items-center justify-between">
         {/* 🔸 Logo */}
-        <div className="h-8 w-12 rounded-full overflow-hidden">
-          <img
+        <div className="h-8 w-fit rounded-full overflow-hidden">
+          {/* <img
             src="logo.png"
             alt="Logo"
             className="h-full w-full object-cover"
-          />
+          /> */}
+          <h1 className="text-2xl text-primary font-bold">CityFab</h1>
         </div>
 
         {/* 🔸 Search Input */}
@@ -61,25 +71,24 @@ const Header = () => {
           {/* Mobile Menu Icon */}
           <Sheet>
             <SheetTrigger>
+              <button className="relative cursor-pointer md:block hidden">
+                <ShoppingCart className="w-6 h-6" />
+              </button>
               <button className="md:hidden block">
                 <Menu className="w-6 h-6" />
               </button>
             </SheetTrigger>
-            <SheetContent>
+            <SheetContent side="right" className="w-[95%] md:w-1/2">
               <SheetHeader>
                 <SheetTitle>Cart</SheetTitle>
                 <SheetDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  <CartItem items={items} />
                 </SheetDescription>
               </SheetHeader>
             </SheetContent>
           </Sheet>
 
           {/* Cart Icon */}
-          <button className="relative cursor-pointer md:block hidden">
-            <ShoppingCart className="w-6 h-6" />
-          </button>
 
           {/* Login */}
           <button className="ml-2 cursor-pointer md:block hidden">Login</button>

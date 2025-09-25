@@ -14,7 +14,7 @@ export default function ImageSliderTailwind({
   autoplay,
   showNavigation,
 }) {
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
   // const { addToWishlist, removeFromWishlist, wishlist } = useWishlist();
   const [liked, setLiked] = useState({});
 
@@ -72,7 +72,7 @@ export default function ImageSliderTailwind({
             <SwiperSlide key={p.id}>
               <div
                 className="bg-white rounded-lg shadow overflow-hidden mt-4 cursor-pointer relative"
-                onClick={() => navigate(`/product/${p.id}`)}
+                onClick={() => navigate(`/items/${p.id}`)}
               >
                 <div className="relative w-full h-40 sm:h-52 md:h-60 lg:h-64">
                   <img

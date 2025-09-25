@@ -4,6 +4,17 @@ import ProductCard from "../component/card";
 import HeroBanner from "../component/herobanner";
 import ImageSliderTailwind from "../component/slider1";
 
+
+
+const topproducts = [
+  { id: "1", img: "/shirt/shirt1.jpg", name: "Shirt 1", price: 250 },
+  { id: "5", img: "/bow/bow1.jpg", name: "Pant 5", price: 200 },
+  { id: "2", img: "/pants/pant2.png", name: "Pant 2", price: 200 },
+  { id: "4", img: "/bow/cap1.webp", name: "Shirt 4", price: 250 },
+  { id: "3", img: "/product1.jpg", name: "Shirt 3", price: 250 },
+  { id: "7", img: "/bow/bow2.jpg", name: "Shirt 7", price: 250 },
+  { id: "6", img: "/bow/cap2.webp", name: "Shirt 6", price: 250 },
+];
 const shirts = [
   { id: "1", img: "/shirt/shirt1.jpg", name: "Shirt 1", price: 250 },
   { id: "2", img: "/shirt/shirt2.webp", name: "Shirt 2", price: 250 },
@@ -68,10 +79,16 @@ const Home = () => {
       <div className="md:space-y-6 space-y-2 ">
         <HeroBanner />
         <ImageSliderTailwind
-          products={products}
-          title="Grab the best deal best"
+          products={topproducts}
+          title="Grab latest"
           showNavigation={false}
           autoplay={true}
+        />
+        <ImageSliderTailwind
+          products={products}
+          title="Grab the best deal best"
+          showNavigation={true}
+          autoplay={false}
         />
         <ImageSliderTailwind
           products={shirts}

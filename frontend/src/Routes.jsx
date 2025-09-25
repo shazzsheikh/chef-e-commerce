@@ -39,6 +39,7 @@ import Footer from "./layout/footer";
 import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomeSkeletonLoader from "./components/skelatonloader";
+import ItemDetails from "./pages/itemsdetails";
 
 // Import shadcn skeleton (adjust import path as per your setup)
 
@@ -62,6 +63,8 @@ const AppRoutes = () => {
         <main className="content">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/products" element={<div>Products Page</div>} />
+            <Route path="/items/:id" element={<ItemDetails />} />
             {/* Other routes */}
           </Routes>
         </main>
