@@ -42,7 +42,7 @@ import HomeSkeletonLoader from "./components/skelatonloader";
 import ItemDetails from "./pages/itemsdetails";
 
 // Import shadcn skeleton (adjust import path as per your setup)
-
+import { Head } from "../Admin/layout/head";
 const AppRoutes = () => {
   const [loading, setLoading] = useState(true);
 
@@ -70,6 +70,12 @@ const AppRoutes = () => {
         </main>
         <Footer />
       </div>
+     
+        <Routes>
+          <Route path="/admin" element={<Head />} />
+          <Route path="/admin/products" element={<div>Admin Products</div>} />
+          {/* Other admin routes */}
+        </Routes>
     </Router>
   );
 };
