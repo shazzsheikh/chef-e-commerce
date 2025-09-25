@@ -1,5 +1,5 @@
 import React from "react";
 
 export const Head = () => {
-  return <div>Header</div>;
+  return <div>Header divya bharti sbse pyar krti hai</div>;
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ShoppingCart, Heart, Search, MapPin, Menu } from "lucide-react";
 import { FaPhoneAlt, FaShoppingCart } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
@@ -10,16 +10,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import CartItem from "@/component/cartitem";
+import { Signup } from "../component/signup";
 
 const items = [
   { id: "1", img: "/pants/pant1.jpg", name: "synthetic pants", price: 250 },
   { id: "2", img: "/pants/pant3.jpg", name: "synthetic pants", price: 250 },
   { id: "3", img: "/shirt/shirt1.jpg", name: "synthetic shirt", price: 150 },
   { id: "4", img: "/shoes/shoes2.jpg", name: "synthetic shoes", price: 350 },
-
 ];
 const Header = () => {
+  const [showsignup, setshowsignup] = useState(false);
   return (
     <header className="">
       <div className="flex md:flex-row flex-col justify-between items-center md:px-8 px-4 py-1 green-bg text-white text-sm">
@@ -40,7 +49,7 @@ const Header = () => {
           <span>Delhi</span>
         </div>
       </div>
-      <nav className="primary-color md:px-8 px-2 pt-2 flex md:flex-row items-center justify-between">
+      <nav className="primary-color md:px-8 px-2 pt-2 flex md:flex-row items-center justify-between my-2">
         {/* 🔸 Logo */}
         <div className="h-8 w-fit rounded-full overflow-hidden">
           {/* <img
@@ -67,7 +76,25 @@ const Header = () => {
         </div>
 
         {/* 🔸 Icons */}
-        <div className="flex items-center md:px-2 py-1 md:space-x-6 mt-2 md:mt-0">
+        <div className="flex items-center md:px-2 py-1 space-x-6 md:mt-0">
+          <Dialog>
+            <DialogTrigger>
+              {" "}
+              <button className="ml-2 cursor-pointer">Login</button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader class={"m-0 p-0"}>
+                <DialogTitle></DialogTitle>
+                <DialogDescription
+                  className={
+                    "p-0 m-0 flex flex-col justify-center align-center"
+                  }
+                >
+                  <Signup />
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
           {/* Mobile Menu Icon */}
           <Sheet>
             <SheetTrigger>
@@ -87,11 +114,6 @@ const Header = () => {
               </SheetHeader>
             </SheetContent>
           </Sheet>
-
-          {/* Cart Icon */}
-
-          {/* Login */}
-          <button className="ml-2 cursor-pointer md:block hidden">Login</button>
         </div>
       </nav>
       {/* Mobile Search Input */}

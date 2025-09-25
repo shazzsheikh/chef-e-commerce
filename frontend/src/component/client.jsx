@@ -53,7 +53,7 @@ export default function CraftSection() {
           className="w-full md:w-1/2 flex flex-col md:items-center text-left md:text-center"
         >
           <div className="text-4xl sm:text-5xl md:text-6xl font-bold">
-            {count}
+            {count}+
           </div>
           <span className="block mt-2 tracking-widest text-sm sm:text-base">
             OUR CLIENT
