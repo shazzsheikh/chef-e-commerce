@@ -1,7 +1,8 @@
 const express = require("express");
-
+require("dotenv").config();
 const cors = require("cors");
-const { default: mongoose } = require("mongoose");
+const connectDB = require("./server.js");
+
 // const { upload } = require("./utils/cloudconnection.js");
 const app = express();
 app.use(
@@ -24,18 +25,11 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use("/api/todos", require("./routes/todoroute.js"));
-mongoose
-  .connect("mongodb://localhost:27017/todo1", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("mongodb was connected successfully");
-    app.listen(3000, () => {
-      console.log("your port is running on this 3000");
-    });
-  })
-  .catch((err) => {
-    console.error("Database connection error:", err);
+app.use("/api/auth", require("./routes/auth.js"));
+
+const PORT = process.env.PORT || 3000;
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`server running at http://localhost:${PORT}`);
   });
+});
