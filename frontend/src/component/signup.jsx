@@ -2,31 +2,20 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
-export const Signup = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-
-    // ✅ Replace with actual API call
-  };
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+export const Signup = ({ onSuccess }) => {
+  const [activetab, setactivetab] = useState("login");
   return (
     <div>
       <Tabs
-        defaultValue="account"
+        value={activetab}
+        onValueChange={(val) => setactivetab(val)} // tab switch handler
         className="flex flex-col items-center justify-center"
       >
         <TabsList className="">
           <TabsTrigger
-            value="account"
+            value="login"
             className="text-2xl font-bold text-gray-600"
           >
             Login
@@ -40,30 +29,49 @@ export const Signup = () => {
         </TabsList>
 
         <TabsContent
-          value="account"
+          value="login"
           className="flex justify-center items-center w-full"
         >
-          <SignUpForm />
+          <Login onSuccess={onSuccess} />
         </TabsContent>
 
         <TabsContent
           value="password"
           className="flex justify-center items-center w-full"
         >
-          <SignINForm />
+          <SignINForm setactivetab={setactivetab} />
         </TabsContent>
       </Tabs>
     </div>
   );
 };
 
-function SignUpForm() {
+function Login({ onSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ email, password });
+    try {
+      const res = await axios.post("http://localhost:3000/api/auth/login", {
+        email,
+        password,
+      });
+      console.log("✅ Submitted successfully:", res.data);
+      alert("Login successfully!");
+      setEmail("");
+      setPassword("");
+      const { token, user } = res.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      if (onSuccess) onSuccess(user);
+    } catch (error) {
+      console.error(
+        "❌ Submission failed:",
+        error.response?.data || error.message
+      );
+      alert("Something went wrong");
+    }
   };
 
   return (
@@ -128,7 +136,7 @@ function SignUpForm() {
   );
 }
 
-function SignINForm() {
+function SignINForm({ setactivetab }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -145,22 +153,44 @@ function SignINForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Simple password match check
+    // ✅ Password check pehle karo
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
+    const { confirmPassword, ...dataToSend } = formData;
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/auth",
+        dataToSend
+      );
+      console.log("✅ Submitted successfully:", response.data);
+      alert("Account created successfully!");
+      setFormData({
+        name: "",
+        email: "",
+        phonenumber: "",
+        password: "",
+        confirmPassword: "",
+        address: "",
+      });
 
-    console.log("Submitted data:", formData);
-    // TODO: send to backend
+      setactivetab("login");
+    } catch (error) {
+      console.error(
+        "❌ Submission failed:",
+        error.response?.data || error.message
+      );
+      alert("Something went wrong");
+    }
   };
 
   return (
     <div className="w-full flex items-center justify-center bg-gray-50">
-      <div className="w-full p-6 bg-white rounded-2xl shadow-lg">
+      <div className="w-full max-w-md p-6 bg-white rounded-2xl shadow-lg">
         <h2 className="text-2xl font-bold text-center">Create an account</h2>
         <p className="mt-1 text-sm text-gray-500 text-center">
           Enter your details to create your account
@@ -258,5 +288,3 @@ function SignINForm() {
     </div>
   );
 }
-
-export default SignINForm;

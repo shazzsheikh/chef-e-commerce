@@ -20,7 +20,8 @@ import {
 } from "@/components/ui/dialog";
 import CartItem from "@/component/cartitem";
 import { Signup } from "../component/signup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaUser } from "react-icons/fa"; // User icon
 
 const items = [
   { id: "1", img: "/pants/pant1.jpg", name: "synthetic pants", price: 250 },
@@ -30,6 +31,11 @@ const items = [
 ];
 const Header = () => {
   const [opencart, setopencart] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
   return (
     <header className="">
       <div className="flex md:flex-row flex-col justify-between items-center md:px-8 px-4 py-1 green-bg text-white text-sm">
@@ -59,7 +65,7 @@ const Header = () => {
             className="h-full w-full object-cover"
           /> */}
           <Link to="/">
-            <h1 className="text-2xl text-primary font-bold">CityFab</h1>
+            <h1 className="text-2xl text-primary font-bold">CITYFAB</h1>
           </Link>
         </div>
 
@@ -79,25 +85,38 @@ const Header = () => {
         </div>
 
         {/* 🔸 Icons */}
-        <div className="flex items-center md:px-2 py-1 space-x-6 md:mt-0">
-          <Dialog>
-            <DialogTrigger>
-              {" "}
-              <button className="ml-2 cursor-pointer">Login</button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader class={"m-0 p-0"}>
-                <DialogTitle></DialogTitle>
-                <DialogDescription
-                  className={
-                    "p-0 m-0 flex flex-col justify-center align-center"
-                  }
-                >
-                  <Signup />
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+        <div className="flex items-center md:px-2 py-1 md:space-x-6 md:mt-0">
+          {user ? (
+            <div className="flex items-center md:gap-2">
+              <FaUser className="w-4 h-4 text-gray-600" />
+              <UserUI user={user} setUser={setUser} />
+            </div>
+          ) : (
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger>
+                {" "}
+                <button className="ml-2 mx-4 cursor-pointer">Login</button>{" "}
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader class={"m-0 p-0"}>
+                  <DialogTitle></DialogTitle>
+                  <DialogDescription
+                    className={
+                      "p-0 m-0 flex flex-col justify-center align-center"
+                    }
+                  >
+                    <Signup
+                      onSuccess={(userData) => {
+                        localStorage.setItem("user", JSON.stringify(userData));
+                        setUser(userData); // 🔥 yeh important hai
+                        setOpen(false); // modal close
+                      }}
+                    />
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+          )}
           {/* Mobile Menu Icon */}
           <Sheet open={opencart} onOpenChange={setopencart}>
             <SheetTrigger>
@@ -138,3 +157,53 @@ const Header = () => {
 };
 
 export default Header;
+
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu";
+
+const UserUI = ({ user, setUser }) => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setUser(null);
+    navigate("/");
+  };
+  return (
+    <div className="">
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger className={" md:text-xl"}>
+              {user.name.split(" ")[0]}
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <NavigationMenuLink className="block px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer">
+                Edit Profile
+              </NavigationMenuLink>
+              <NavigationMenuLink className="block px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer">
+                Orders
+              </NavigationMenuLink>
+              <NavigationMenuLink
+                className="block px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+                onClick={() => {
+                  handleLogout();
+                }}
+              >
+                Logout
+              </NavigationMenuLink>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </div>
+  );
+};
