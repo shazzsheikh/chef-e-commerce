@@ -41,6 +41,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
   useLocation,
   Outlet,
 } from "react-router-dom";
@@ -49,7 +50,11 @@ import ItemDetails from "./pages/itemsdetails";
 import Summarypage from "./pages/summarypage";
 
 // Import shadcn skeleton (adjust import path as per your setup)
-import { Head } from "../Admin/layout/head";
+import { Head } from "../Admin/layout/Dashboard";
+import Adminlogin from "../Admin/component/signin";
+import ProductManager from "../Admin/component/product";
+import { AdminOrders } from "../Admin/component/adminorders";
+import Layout from "../Admin/layout/layout";
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -78,7 +83,9 @@ function AdminLayout() {
   return (
     <div className="admin-layout">
       {/* Maybe admin sidebar */}
-      <Outlet />
+      <Layout>
+        <Outlet />
+      </Layout>
     </div>
   );
 }
@@ -106,26 +113,18 @@ const AppRoutes = () => {
           {/* <Route path="/products" element={<Products />} /> */}
           <Route path="/items/:id" element={<ItemDetails />} />
           <Route path="/checkout" element={<Summarypage />} />
+          <Route path="/admin/login" element={<Adminlogin />} />
         </Route>
 
         {/* Protected Admin Routes */}
-        <Route
-          path="/admin"
-          element={
-            // <PrivateRoute>
-            //   <AdminLayout />
-            // </PrivateRoute>
-            <AdminLayout />
-          }
-        >
-          <Route index element={<Head />} />
-          {/* <Route path="products" element={<AdminProducts />} /> */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="home" element={<Head />} />
+            <Route path="products" element={<ProductManager />} />
+            <Route path="orders" element={<AdminOrders />} />
+          </Route>
         </Route>
 
-        {/* Auth route */}
-        {/* <Route path="/login" element={<Login />} /> */}
-
-        {/* Optional 404 page */}
         <Route path="*" element={<div>404 - Page Not Found</div>} />
       </Routes>
     </Router>
@@ -133,3 +132,9 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
+
+const PrivateRoute = () => {
+  const isAuthenticated = localStorage.getItem("admintoken"); // ya koi auth context se check karo
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/admin/login" />;
+};

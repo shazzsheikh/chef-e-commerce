@@ -1,4 +1,5 @@
 // db/mongoose.js
+const seedAdmin = require("./seed.js");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const connectDB = async () => {
@@ -8,6 +9,8 @@ const connectDB = async () => {
       useUnifiedTopology: true,
     });
     console.log("✅ MongoDB connected successfully");
+    await seedAdmin();
+    console.log("✅ admin was created");
   } catch (error) {
     console.error("❌ MongoDB connection failed:", error);
     process.exit(1); // Exit the app if DB connection fails

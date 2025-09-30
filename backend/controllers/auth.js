@@ -1,8 +1,39 @@
 const auth = require("../models/authmodel.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const admin = require("../models/adminmodel.js");
 require("dotenv").config();
 
+exports.adminlogin = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const Admin = await admin.findOne({ email });
+    if (!Admin) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+    const passwordmatch = await bcrypt.compare(password, Admin.password);
+    if (!passwordmatch) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+    const admintoken = jwt.sign(
+      { AdminId: admin._id, email: Admin.email },
+      process.env.ADMIN_TOKEN || "secretkey", // Make sure to set this in env
+      { expiresIn: "1h" }
+    );
+    res.status(200).json({
+      message: "admin login successful",
+      admintoken,
+      admin: {
+        id: Admin._id,
+        email: Admin.email,
+        name: Admin.name,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "loging error" });
+    console.error("Error fetching tasks:", error);
+  }
+};
 // Get all tasks
 exports.Login = async (req, res) => {
   const { email, password } = req.body;
