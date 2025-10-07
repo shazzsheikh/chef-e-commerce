@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API } from "../../api/api";
 export const Signup = ({ onSuccess }) => {
   const [activetab, setactivetab] = useState("login");
   return (
@@ -30,14 +31,14 @@ export const Signup = ({ onSuccess }) => {
 
         <TabsContent
           value="login"
-          className="flex justify-center items-center w-full"
+          className="flex justify-center items-center w-full max-h-[90vh] overflow-y-auto"
         >
           <Login onSuccess={onSuccess} />
         </TabsContent>
 
         <TabsContent
           value="password"
-          className="flex justify-center items-center w-full"
+          className="flex justify-center items-center w-full max-h-[90vh] overflow-y-auto"
         >
           <SignINForm setactivetab={setactivetab} />
         </TabsContent>
@@ -53,7 +54,7 @@ function Login({ onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", {
+      const res = await API.post("/auth/login", {
         email,
         password,
       });
@@ -143,7 +144,6 @@ function SignINForm({ setactivetab }) {
     phonenumber: "",
     password: "",
     confirmPassword: "",
-    address: "",
   });
 
   const handleChange = (e) => {
@@ -163,10 +163,7 @@ function SignINForm({ setactivetab }) {
     }
     const { confirmPassword, ...dataToSend } = formData;
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth",
-        dataToSend
-      );
+      const response = await API.post("/auth", dataToSend);
       console.log("✅ Submitted successfully:", response.data);
       alert("Account created successfully!");
       setFormData({
@@ -175,7 +172,6 @@ function SignINForm({ setactivetab }) {
         phonenumber: "",
         password: "",
         confirmPassword: "",
-        address: "",
       });
 
       setactivetab("login");
@@ -205,7 +201,7 @@ function SignINForm({ setactivetab }) {
               value={formData.name}
               onChange={handleChange}
               placeholder="Divya Bharti"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
               required
             />
           </div>
@@ -218,7 +214,7 @@ function SignINForm({ setactivetab }) {
               value={formData.email}
               onChange={handleChange}
               placeholder="m@example.com"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
               required
             />
           </div>
@@ -233,7 +229,7 @@ function SignINForm({ setactivetab }) {
               value={formData.phonenumber}
               onChange={handleChange}
               placeholder="1234567890"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
               required
             />
           </div>
@@ -245,7 +241,7 @@ function SignINForm({ setactivetab }) {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
               required
             />
           </div>
@@ -259,24 +255,10 @@ function SignINForm({ setactivetab }) {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
               required
             />
           </div>
-
-          <div>
-            <label className="block mb-1 text-sm font-medium">Address</label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              placeholder="Full address"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-              required
-            />
-          </div>
-
           <button
             type="submit"
             className="w-full py-2 text-white bg-black rounded-lg hover:bg-gray-900 transition"

@@ -44,7 +44,7 @@ export default function ImageSliderTailwind({
           <h2 className="md:text-2xl text-sm sm:text-3xl font-bold text-gray-700 border-b-4 border-primary pb-1">
             {title} <span className="text-primary">products</span>
           </h2>
-          <Link to="/products">
+          <Link to="home/viewsproducts"  state={{ products }} >
             <button className="btn-border text-sm sm:text-base font-medium text-primary ">
               View All
             </button>
@@ -69,14 +69,14 @@ export default function ImageSliderTailwind({
           className={`mySwiper relative`}
         >
           {products.map((p) => (
-            <SwiperSlide key={p.id}>
+            <SwiperSlide key={p._id}>
               <div
                 className="bg-white rounded-lg shadow overflow-hidden mt-4 cursor-pointer relative"
-                onClick={() => navigate(`/items/${p.id}`)}
+                onClick={() => navigate(`/items/${p._id}`)}
               >
                 <div className="relative w-full h-40 sm:h-52 md:h-60 lg:h-64">
                   <img
-                    src={p.img}
+                    src={p.image?.[0]}
                     alt={`Product ${p.id}`}
                     className="object-cover w-full h-full"
                   />
@@ -97,10 +97,10 @@ export default function ImageSliderTailwind({
                 </div>
                 <div className="p-2 sm:p-3 text-left">
                   <p className="uppercase text-[9px] sm:text-xs tracking-wide text-gray-500">
-                    FB Collection
+                    CITYFAB Collection
                   </p>
                   <h3 className="text-sm sm:text-base font-medium text-gray-900">
-                    {p.name || `Product ${p.id}`}
+                    {p.name || `Product ${p._id}`}
                   </h3>
                   <p className="text-sm sm:text-base font-semibold text-gray-800">
                     ₹ {p.price} INR

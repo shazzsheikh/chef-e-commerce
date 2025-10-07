@@ -10,7 +10,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#323232] text-white py-10 mt-10">
+    <footer className="bg-[#323232] text-white py-10 md:mt-6">
       <div className="w-[85vw] mx-auto flex flex-col md:flex-row gap-10">
         <div className="flex-1">
           <h2 className="text-2xl font-bold">E-commerce</h2>
@@ -27,7 +27,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="text-[#F5F5DC] hover:underline"
             >
-             SHAHANSHAH
+              SHAHANSHAH
             </a>
           </p>
         </div>
@@ -107,7 +107,10 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/frequently-asked-questions" className="hover:underline">
+                <a
+                  href="/frequently-asked-questions"
+                  className="hover:underline"
+                >
                   FAQ's
                 </a>
               </li>
@@ -172,8 +175,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-gray-700 mt-8 pt-4 text-center text-white text-sm">
-        © {new Date().getFullYear()} fiber and Creation. All rights
-        reserved.
+        © {new Date().getFullYear()} fiber and Creation. All rights reserved.
       </div>
     </footer>
   );

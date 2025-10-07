@@ -65,6 +65,62 @@ exports.Login = async (req, res) => {
     console.error("Error fetching tasks:", error);
   }
 };
+
+exports.Getaddress = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await auth.findById(id).select("address");
+    console.log(user);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ address: user.address });
+  } catch (error) {
+    console.error("Error fetching address:", error);
+    res.status(500).json({ message: "Something went wrong", error });
+  }
+};
+
+exports.Addaddress = async (req, res) => {
+  const { id } = req.params;
+  const { address } = req.body;
+  // Check if all required address fields exist
+  const requiredFields = [
+    "fullName",
+    "phone",
+    "street",
+    "city",
+    "state",
+    "postalCode",
+    "country",
+  ];
+  const missingFields = requiredFields.filter(
+    (field) => !address || !address[field]
+  );
+  if (missingFields.length > 0) {
+    return res.status(400).json({
+      message: `Missing required address fields: ${missingFields.join(", ")}`,
+    });
+  }
+  try {
+    const user = await auth.findByIdAndUpdate(
+      id,
+      { $set: { address: address } },
+      { new: true } // return updated users
+    );
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res
+      .status(200)
+      .json({ address: user.address, message: "Address added successfully" });
+  } catch (error) {
+    console.error("Address update failed:", error); // 👈 Add this
+    res.status(500).json({ message: "Failed to save address" });
+  }
+};
+
 // Create a new task
 exports.signup = async (req, res) => {
   const { name, email, phonenumber, password, address } = req.body;

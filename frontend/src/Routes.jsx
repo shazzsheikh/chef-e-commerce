@@ -55,6 +55,7 @@ import Adminlogin from "../Admin/component/signin";
 import ProductManager from "../Admin/component/product";
 import { AdminOrders } from "../Admin/component/adminorders";
 import Layout from "../Admin/layout/layout";
+import { Viewsall } from "./pages/viewsall";
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -112,8 +113,9 @@ const AppRoutes = () => {
           <Route path="/" element={<Home />} />
           {/* <Route path="/products" element={<Products />} /> */}
           <Route path="/items/:id" element={<ItemDetails />} />
-          <Route path="/checkout" element={<Summarypage />} />
+          <Route path="/home/checkout" element={<Summarypage />} />
           <Route path="/admin/login" element={<Adminlogin />} />
+          <Route path="home/viewsproducts" element={<Viewsall />} />
         </Route>
 
         {/* Protected Admin Routes */}

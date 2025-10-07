@@ -1,6 +1,7 @@
 // db/mongoose.js
 const seedAdmin = require("./seed.js");
 const mongoose = require("mongoose");
+const { cloudinary } = require("./config/cloudnary.js");
 require("dotenv").config();
 const connectDB = async () => {
   try {

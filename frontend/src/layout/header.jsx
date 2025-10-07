@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ShoppingCart, Heart, Search, MapPin, Menu } from "lucide-react";
 import { FaPhoneAlt, FaShoppingCart } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
@@ -20,22 +20,26 @@ import {
 } from "@/components/ui/dialog";
 import CartItem from "@/component/cartitem";
 import { Signup } from "../component/signup";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUser } from "react-icons/fa"; // User icon
 
-const items = [
-  { id: "1", img: "/pants/pant1.jpg", name: "synthetic pants", price: 250 },
-  { id: "2", img: "/pants/pant3.jpg", name: "synthetic pants", price: 250 },
-  { id: "3", img: "/shirt/shirt1.jpg", name: "synthetic shirt", price: 150 },
-  { id: "4", img: "/shoes/shoes2.jpg", name: "synthetic shoes", price: 350 },
-];
 const Header = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [opencart, setopencart] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(() => location.state?.open ?? false);
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  useEffect(() => {
+    if (location.state?.open) {
+      setOpen(true);
+      // Clear the state after using it
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.state, navigate, location.pathname]);
+
   return (
     <header className="">
       <div className="flex md:flex-row flex-col justify-between items-center md:px-8 px-4 py-1 green-bg text-white text-sm">
@@ -94,8 +98,7 @@ const Header = () => {
           ) : (
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger>
-                {" "}
-                <button className="ml-2 mx-4 cursor-pointer">Login</button>{" "}
+                <span className="ml-2 mx-4 cursor-pointer">Login</span>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader class={"m-0 p-0"}>
@@ -120,18 +123,17 @@ const Header = () => {
           {/* Mobile Menu Icon */}
           <Sheet open={opencart} onOpenChange={setopencart}>
             <SheetTrigger>
-              <button className="relative cursor-pointer">
+              <span className="relative cursor-pointer">
                 <ShoppingCart className="w-6 h-6" />
-              </button>
-              {/* <button className="md:hidden block">
-                <Menu className="w-6 h-6" />
-              </button> */}
+              </span>
             </SheetTrigger>
             <SheetContent side="right" className="w-[95%] md:w-1/2">
               <SheetHeader>
                 <SheetTitle>Cart</SheetTitle>
                 <SheetDescription>
-                  <CartItem items={items} setopencart={setopencart} />
+                  <div className="mt-2 max-h-[85vh] overflow-y-auto pr-1">
+                    <CartItem setopencart={setopencart} />
+                  </div>
                 </SheetDescription>
               </SheetHeader>
             </SheetContent>

@@ -1,48 +1,46 @@
 import React, { useState } from "react";
-
+import { ProductForm } from "./productform";
+import { API } from "../../api/api";
+import { useEffect } from "react";
 const ProductManager = () => {
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [products, setProducts] = useState([]);
-  const [product, setProduct] = useState({
-    name: "",
-    price: "",
-    description: "",
-    category: "",
-    image: null,
-  });
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setProduct((prev) => ({
-      ...prev,
-      [name]: files ? files[0] : value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const newProduct = {
-      ...product,
-      id: Date.now(),
-      imagePreview: product.image ? URL.createObjectURL(product.image) : null,
-    };
-
-    setProducts([newProduct, ...products]); // Add new product at top
-    setShowForm(false);
-    setProduct({
-      name: "",
-      price: "",
-      description: "",
-      category: "",
-      image: null,
-    });
-  };
-
-  const filteredProducts = products.filter((p) =>
+  const [localproducts, setlocalproducts] = useState([]);
+  const filteredlocalproducts = localproducts.filter((p) =>
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const prob = await API.get("/products/adminshowproducts");
+        setlocalproducts(prob.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleview = async (id) => {
+    const view = localproducts.find((prev) => prev._id === id);
+    setSelectedProduct(view);
+  };
+  const handleedit = async (id) => {};
+  const handledelete = async (id) => {
+    try {
+      const res = await API.delete(`/products/${id}`);
+      if (res.data.success) {
+        alert("Product deleted successfully ✅");
+        setlocalproducts((prev) => prev.filter((prod) => prod._id !== id));
+      } else {
+        alert("failed to delete product");
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      alert("Something went wrong while deleting the product.");
+    }
+  };
 
   return (
     <>
@@ -51,7 +49,7 @@ const ProductManager = () => {
         <div className="flex justify-between items-center mb-6">
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder="Search products by name "
             className="border px-3 py-2 rounded w-full max-w-md"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -66,87 +64,35 @@ const ProductManager = () => {
 
         {/* Product Form */}
         {showForm && (
-          <form
-            onSubmit={handleSubmit}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4 border p-4 rounded bg-gray-50 mb-6"
-          >
-            <input
-              type="text"
-              name="name"
-              placeholder="Product Name"
-              className="border p-2 rounded"
-              value={product.name}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="number"
-              name="price"
-              placeholder="Price"
-              className="border p-2 rounded"
-              value={product.price}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="category"
-              placeholder="Category"
-              className="border p-2 rounded"
-              value={product.category}
-              onChange={handleChange}
-            />
-            <input
-              type="file"
-              name="image"
-              className="border p-2 rounded"
-              onChange={handleChange}
-            />
-            <textarea
-              name="description"
-              placeholder="Description"
-              className="border p-2 rounded col-span-1 md:col-span-2"
-              value={product.description}
-              onChange={handleChange}
-            />
-            <div className="col-span-1 md:col-span-2 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => setShowForm(false)}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
+          <ProductForm
+            setShowForm={setShowForm}
+            setlocalproducts={setlocalproducts}
+          />
         )}
       </div>
       {/* Product Table */}
       <div className="overflow-x-auto my-6 mx-3">
-        {filteredProducts.length > 0 ? (
+        {filteredlocalproducts.length > 0 ? (
           <table className="min-w-full table-auto border">
             <thead className="bg-gray-100">
               <tr>
                 <th className="p-2 border">Image</th>
                 <th className="p-2 border">Name</th>
                 <th className="p-2 border">Price</th>
-                <th className="p-2 border">Category</th>
-                <th className="p-2 border">Description</th>
+                <th className="p-2 border">Cloth Type</th>
+                <th className="p-2 border">Size</th>
+                <th className="p-2 border">Color</th>
+                <th className="p-2 border">Status</th>
+                <th className="p-2 border">Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredProducts.map((prod) => (
-                <tr key={prod.id} className="text-center">
+              {filteredlocalproducts.map((prod) => (
+                <tr key={prod._id} className="text-center">
                   <td className="border p-2">
-                    {prod.imagePreview ? (
+                    {prod.image ? (
                       <img
-                        src={prod.imagePreview}
+                        src={prod.image[0]}
                         alt={prod.name}
                         className="h-12 mx-auto"
                       />
@@ -156,18 +102,159 @@ const ProductManager = () => {
                   </td>
                   <td className="border p-2">{prod.name}</td>
                   <td className="border p-2">₹{prod.price}</td>
-                  <td className="border p-2">{prod.category}</td>
-                  <td className="border p-2">{prod.description}</td>
+                  <td className="border p-2">{prod.clothType}</td>
+                  <td className="border p-2">{prod.size.join(", ")}</td>
+                  <td className="border p-2">{prod.color}</td>
+                  <td
+                    className={`border p-2 ${
+                      prod.status === "active"
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {prod.status}
+                  </td>
+                  <td className="border">
+                    <div className="flex p-2 space-x-0.5 justify-center">
+                      <button
+                        className="btn-card bg-secondary/80"
+                        onClick={() => handleview(prod._id)}
+                      >
+                        View
+                      </button>{" "}
+                      <button
+                        className="btn-card bg-secondary/80"
+                        onClick={() => handleedit(prod._id)}
+                      >
+                        Edit
+                      </button>{" "}
+                      <button
+                        className="btn-card bg-red-700/80"
+                        onClick={() => handledelete(prod._id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
-          <p className="text-gray-500 text-center">No products found.</p>
+          <p className="text-gray-500 text-center">No localproducts found.</p>
         )}
       </div>
+      {selectedProduct && (
+        <View view={selectedProduct} onClose={() => setSelectedProduct(null)} />
+      )}
     </>
   );
 };
 
 export default ProductManager;
+
+const View = ({ view, onClose }) => {
+  if (!view) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 relative w-[90%] max-w-xl max-h-[90vh] overflow-y-auto">
+        {/* ❌ Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-2xl font-bold"
+        >
+          &times;
+        </button>
+
+        {/* ✅ Product Details */}
+        <h2 className="text-2xl font-bold mb-4 text-center">Product Details</h2>
+
+        {/* Images */}
+        {view.image && view.image.length > 0 && (
+          <div className="flex gap-2 flex-wrap justify-center mb-4">
+            {view.image.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Product Image ${index + 1}`}
+                className="w-24 h-24 object-cover rounded border"
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Text Details */}
+        <div className="space-y-4 text-sm sm:text-base">
+          {/* Two-column fields */}
+          <div className="flex flex-wrap gap-x-10 gap-y-3">
+            <p className="w-1/2">
+              <strong>Name:</strong> {view.name}
+            </p>
+            <p className="w-1/2">
+              <strong>Price:</strong> ₹{view.price}
+            </p>
+            <p className="w-1/2">
+              <strong>Description:</strong> {view.description}
+            </p>
+            <p className="w-1/2">
+              <strong>Cloth Type:</strong> {view.clothType}
+            </p>
+            <p className="w-1/2">
+              <strong>Brand:</strong> {view.brand || "-"}
+            </p>
+            <p className="w-1/2">
+              <strong>Size:</strong> {view.size?.join(", ") || "-"}
+            </p>
+            <p className="w-1/2">
+              <strong>Quantity:</strong> {view.quantity}
+            </p>
+            <p className="w-1/2">
+              <strong>Category:</strong> {view.category || "-"}
+            </p>
+            <p className="w-1/2">
+              <strong>Color:</strong> {view.color}
+            </p>
+            <p className="w-1/2">
+              <strong>Material:</strong> {view.material}
+            </p>
+            <p className="w-1/2">
+              <strong>Status:</strong>{" "}
+              <span
+                className={
+                  view.status === "active" ? "text-green-600" : "text-red-600"
+                }
+              >
+                {view.status}
+              </span>
+            </p>
+          </div>
+
+          {/* Full width Product Details */}
+          {view.productdetails?.length > 0 && (
+            <div className="w-full">
+              <strong>Product Details:</strong>
+              <ul className="list-disc list-inside">
+                {view.productdetails.map((detail, idx) => (
+                  <li key={idx}>{detail}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Full width Specifications */}
+          {view.specification?.length > 0 && (
+            <div className="w-full">
+              <strong>Specifications:</strong>
+              <ul className="list-disc list-inside">
+                {view.specification.map((spec, idx) => (
+                  <li key={idx}>{spec}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};

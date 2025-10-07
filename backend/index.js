@@ -29,6 +29,8 @@ app.use(express.json());
 app.use("/api", require("./routes/auth.js"));
 app.use("/api/auth", require("./routes/auth.js"));
 
+app.use("/api/products",require("./routes/products.js"));
+
 const PORT = process.env.PORT || 3000;
 connectDB().then(() => {
   app.listen(PORT, () => {

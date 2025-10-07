@@ -6,7 +6,15 @@ const authSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     phonenumber: { type: Number, required: true },
     password: { type: String, required: true },
-    address: { type: String },
+    address: {
+      fullName: { type: String},
+      phone: { type: String },
+      street: { type: String },
+      city: { type: String },
+      state: { type: String, enum: ["Delhi", "Delhi/NCR"] },
+      postalCode: { type: String },
+      country: { type: String, enum: ["India"] },
+    },
   },
   { timestamps: true }
 );

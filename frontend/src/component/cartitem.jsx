@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const CartItem = ({ items, setopencart }) => {
+const CartItem = ({ setopencart }) => {
   const navigate = useNavigate();
+  const [items, setItems] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+  const [token, settoken] = useState(localStorage.getItem("token"));
+
   const [quantities, setQuantities] = useState(() =>
     items.reduce((acc, item) => {
       acc[item.id] = item.quantity || 1;
@@ -23,6 +29,22 @@ const CartItem = ({ items, setopencart }) => {
       [id]: prev[id] > 1 ? prev[id] - 1 : 1,
     }));
   };
+
+  const removeItem = (id) => {
+    const updatedItems = items.filter((item) => item.id !== id);
+    setItems(updatedItems);
+    localStorage.setItem("cart", JSON.stringify(updatedItems));
+
+    setQuantities((prev) => {
+      const copy = { ...prev };
+      delete copy[id];
+      return copy;
+    });
+  };
+
+  if (!items || items.length === 0) {
+    return <div>Your cart is empty</div>;
+  }
   return (
     <>
       {items.map((item) => (
@@ -38,7 +60,7 @@ const CartItem = ({ items, setopencart }) => {
             />
             <div className="flex flex-col space-y-2 items-start">
               <h3 className="text-lg font-semibold">{item.name}</h3>
-              <p className="text-black font-bold">{item.price}</p>
+              <p className="text-black font-bold">₹{item.price}</p>
               <div className="flex items-center border border-gray-300 rounded">
                 <button
                   className="px-4 py-2 bg-gray-200 rounded-l hover:bg-gray-300"
@@ -56,7 +78,14 @@ const CartItem = ({ items, setopencart }) => {
               </div>
             </div>
           </div>
-          <button className="text-red-600 hover:text-red-800">Remove</button>
+          <button
+            className="text-red-600 hover:text-red-800"
+            onClick={() => {
+              removeItem(item.id);
+            }}
+          >
+            Remove
+          </button>
         </div>
       ))}
       <div className="flex items-center justify-between p-4 border-t border-gray-200">
@@ -70,9 +99,15 @@ const CartItem = ({ items, setopencart }) => {
         </span>
       </div>
       <button
-        className="w-full bg-primary text-white py-3 rounded hover:bg-primary-dark transition"
+        className={`w-full bg-primary text-white py-3 rounded hover:bg-primary-dark transition cursor-pointer ${
+          token ? "" : "opacity-50"
+        }`}
         onClick={() => {
-          navigate("/checkout");
+          if (!token) {
+            navigate("/", { state: { open: true } });
+          } else {
+            navigate("home/checkout");
+          }
           setopencart(false);
         }}
       >
