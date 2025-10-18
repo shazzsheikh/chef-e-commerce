@@ -16,7 +16,7 @@ export default function OurStory() {
       </section>
 
       {/* Section 2: Brand Overview */}
-      <section className="bg-[#f7f0e9] py-16">
+      <section className="bg-[#F2F2F2]/60 py-16">
         <div className="w-[85vw] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-4xl md:text-6xl font-bold leading-tight text-[#2e2f1e]">
@@ -40,7 +40,7 @@ export default function OurStory() {
       </section>
 
       {/* Section 3: Philosophy */}
-      <section className="bg-[#F8FCE6] py-16">
+      <section className="bg-[#F2F2F2]/60 py-16">
         <div className="w-[85vw] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold leading-tight text-[#2e2f1e]">
