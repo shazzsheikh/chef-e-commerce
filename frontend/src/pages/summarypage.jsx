@@ -6,12 +6,29 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { API } from "../../api/api";
+import CartItem from "@/component/cartitem";
+import { useCart } from "@/component/cartlogic";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function SummaryPage() {
+  const location = useLocation();
+  const buyNowProduct = location.state?.buyNowProduct;
+  const size = location.state?.size;
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [loadingDone, setLoadingDone] = useState(false);
+
   const [address, setAddress] = useState();
   const [form, setform] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
-
+  const {
+    items,
+    quantities,
+    updateQuantity,
+    removeItem,
+    totalAmount,
+    fetchcart,
+  } = useCart();
+  const token = localStorage.getItem("token");
   const fetchAddress = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -25,11 +42,130 @@ export default function SummaryPage() {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/"); // 🔁 Redirect to login
+    }
     fetchAddress();
+    fetchcart();
   }, []);
 
-  // Variable outside JSX
+  const navigate = useNavigate();
+  const handlePlaceOrder = async (paymentMethod) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+        alert("Please login first");
+        navigate("/");
+        return;
+      }
+      const userId = user._id || user.id;
+      let products = [];
+      if (buyNowProduct) {
+        products.push({
+          id: buyNowProduct._id || buyNowProduct.id,
+          name: buyNowProduct.name,
+          size: size || buyNowProduct.size,
+          color: buyNowProduct.color,
+          price: buyNowProduct.price,
+          image: buyNowProduct.image?.[0] || "",
+          quantity: buyNowProduct.qty || 1,
+        });
+      } else {
+        products = items.map((item) => ({
+          id: item.id,
+          name: item.name,
+          size: item.size,
+          color: item.color,
+          price: item.price,
+          image: item.img,
+          quantity: quantities[item.id] || 1,
+        }));
+      }
+
+      const orderPayload = {
+        userId,
+        products,
+        total: finalTotal,
+        paymentMethod,
+      };
+
+      // Call backend order create API
+      const response = await API.post("/order", orderPayload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(response.data.message);
+      if (paymentMethod === "COD") {
+        setShowSuccessPopup(true);
+        setLoadingDone(false);
+
+        setTimeout(() => {
+          setLoadingDone(true);
+        }, 2000); // show loader for 2 seconds
+      } else {
+        // Online Payment flow
+        // const { razorpayOrder } = response.data;
+        // const options = {
+        //   key: "YOUR_RAZORPAY_KEY", // Replace with your Razorpay key
+        //   amount: razorpayOrder.amount,
+        //   currency: razorpayOrder.currency,
+        //   name: "Your Shop Name",
+        //   order_id: razorpayOrder.id,
+        //   handler: async (paymentResponse) => {
+        //     // verify payment
+        //     const verifyRes = await API.post("/orders/verify", paymentResponse);
+        //     if (verifyRes.data.status === "success") {
+        //       alert("Payment Successful!");
+        //       // Clear cart or navigate to success page
+        //       navigate("/order-success");
+        //     } else {
+        //       alert("Payment verification failed. Please contact support.");
+        //     }
+        //   },
+        //   prefill: {
+        //     name: user.name,
+        //     email: user.email,
+        //     contact: user.phone,
+        //   },
+        //   theme: {
+        //     color: "#3399cc",
+        //   },
+        // };
+        // const rzp = new window.Razorpay(options);
+        // rzp.open();
+      }
+    } catch (error) {
+      // ✅ If failed (400, 404, 500, etc.)
+      if (error.response) {
+        console.log("Backend error:", error.response.data.message);
+        alert(error.response.data.message); // Show message to user
+      } else {
+        console.log("Something went wrong:", error.message);
+        alert("Something went wrong. Please try again.");
+      }
+    }
+  };
   const isAddressEmpty = !address || Object.keys(address).length === 0;
+  // Variables for calculations
+  const shipping = 50;
+  let discount = 0;
+  const gstRate = 0.18;
+  let subtotal = 0;
+  let quantity = 1;
+  if (buyNowProduct) {
+    quantity = buyNowProduct.qty || 1;
+    subtotal = buyNowProduct.price * quantity;
+  } else {
+    subtotal = totalAmount;
+    if (subtotal > 1500) {
+      discount = 100;
+    }
+  }
+  const gstAmount = subtotal * gstRate;
+  const finalTotal = Math.round(subtotal + gstAmount + shipping - discount);
 
   return (
     <div className="bg-gray-50 md:py-12 px-4 sm:px-6 lg:px-8 py-6">
@@ -40,9 +176,9 @@ export default function SummaryPage() {
             Order Details
           </h2>
           <Accordion
-            type="single"
+            type="multiple"
             collapsible
-            defaultValue="item-1"
+            defaultValue={["item-1", "item-2"]}
             className="space-y-4"
           >
             <AccordionItem value="item-1">
@@ -82,7 +218,96 @@ export default function SummaryPage() {
                 Product Info
               </AccordionTrigger>
               <AccordionContent className="text-gray-600">
-                All available offers, coupons, and discounts applied.
+                <div className="">
+                  {/* ✅ Check if buyNowProduct exists */}
+                  {buyNowProduct ? (
+                    <div className="flex items-center justify-between p-2 border border-gray-200 mb-4">
+                      <div className="flex items-center space-x-4">
+                        <img
+                          src={buyNowProduct.image?.[0]}
+                          alt={buyNowProduct.name}
+                          className="w-20 h-20 object-cover"
+                        />
+                        <div className="flex flex-col space-y-2 items-start">
+                          <h3 className="text-lg font-semibold">
+                            {buyNowProduct.name} ({buyNowProduct.color})
+                          </h3>
+                          <div className="flex items-center gap-4">
+                            <p className="text-black font-bold">
+                              ₹{buyNowProduct.price}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              Size: {size}
+                            </p>
+                          </div>
+                          <p>Quantity: {buyNowProduct.qty || 1} </p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    // ✅ Else show cart items as usual
+                    items.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between p-2 border border-gray-200 mb-4"
+                      >
+                        <div className="flex items-center space-x-4">
+                          <img
+                            src={item.img}
+                            alt={item.name}
+                            className="w-20 h-20 object-cover"
+                          />
+                          <div className="flex flex-col space-y-2 items-start">
+                            <h3 className="text-lg font-semibold">
+                              {item.name} ({item.color})
+                            </h3>
+                            <div className="flex items-center gap-4">
+                              <p className="text-black font-bold">
+                                ₹{item.price}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                Size: {item.size}
+                              </p>
+                            </div>
+
+                            <div className="flex items-center border border-gray-300 rounded">
+                              <button
+                                className="px-4 py-2 bg-gray-200 rounded-l hover:bg-gray-300"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  updateQuantity(item.id, item.quantity - 1);
+                                }}
+                              >
+                                -
+                              </button>
+                              <span className="px-4 py-2">
+                                {quantities[item.id] || 1}
+                              </span>
+                              <button
+                                className="px-4 py-2 bg-gray-200 rounded-r hover:bg-gray-300"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  updateQuantity(item.id, item.quantity + 1);
+                                }}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          className="text-red-600 hover:text-red-800"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeItem(item.id);
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
               </AccordionContent>
             </AccordionItem>
 
@@ -91,7 +316,7 @@ export default function SummaryPage() {
                 Shipping Info
               </AccordionTrigger>
               <AccordionContent className="text-gray-600">
-                We offer worldwide shipping within 5-7 business days. Tracking
+                We offer worldwide shipping within 3-5 business days. Tracking
                 will be shared after dispatch.
               </AccordionContent>
             </AccordionItem>
@@ -99,38 +324,64 @@ export default function SummaryPage() {
         </div>
 
         {/* Right - Summary Card */}
-        <div className="bg-white shadow-md border border-gray-200 rounded-xl p-6 lg:mx-12 text-center max-w-3xl">
+        <div className="bg-white shadow-md border border-gray-200 rounded-xl p-6 lg:mx-12 text-center max-w-3xl h-[500px] ">
           <h2 className="text-2xl font-bold mb-4 text-center">Order Summary</h2>
           <div className="space-y-3 text-gray-700 text-sm checkout-target">
             <div className="flex justify-between">
               <span className="text-2xl">Subtotal</span>
-              <span className="text-2xl">₹ 888</span>
+              <span className="text-2xl">₹{subtotal} </span>
             </div>
             <div className="flex justify-between">
               <span>Tax (GST)</span>
-              <span>₹ 88</span>
+              <span>₹{gstAmount}</span>
             </div>
             <div className="flex justify-between">
               <span>Shipping</span>
-              <span>₹ 50</span>
+              <span>₹ {shipping}</span>
             </div>
             <div className="flex justify-between text-green-600 font-medium">
               <span>Discount</span>
-              <span>- ₹ 100</span>
+              <span>- ₹ {discount}</span>
             </div>
             <div className="border-t pt-4 flex justify-between text-lg font-semibold">
               <span>Total</span>
-              <span>₹ 926</span>
+              <span>₹ {finalTotal}</span>
             </div>
           </div>
-
-          <div className="mt-6">
-            <button className="w-full bg-primary text-white py-3 rounded-lg hover:bg-gray-800 transition-all duration-200">
-              Pay Now
-            </button>
-          </div>
+          <Orderconfirm handlePlaceOrder={handlePlaceOrder} />
         </div>
       </div>
+      {showSuccessPopup && (
+        <div className="fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center z-50 px-3">
+          <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg text-center animate-fadeIn w-full max-w-md">
+            {!loadingDone ? (
+              <>
+                <div className="flex justify-center items-center space-x-4 mb-4">
+                  <div className="w-8 h-8 border-4 border-primary border-dashed rounded-full animate-spin"></div>
+                  <div className="w-8 h-8 border-4 border-secondary border-dashed rounded-full animate-spin"></div>
+                </div>
+                <p className="text-gray-600 text-lg">Placing your order...</p>
+              </>
+            ) : (
+              <>
+                <div className="text-green-500 text-5xl mb-4">✔️</div>
+                <h2 className="text-2xl font-semibold text-gray-800">
+                  Congratulations!
+                </h2>
+                <p className="mt-2 text-gray-600">
+                  Your order was placed successfully!
+                </p>
+                <button
+                  onClick={() => navigate("/myorders")}
+                  className="mt-6 w-full py-2 px-4 rounded bg-green-600 text-white hover:bg-green-700 transition"
+                >
+                  Okay, Go to My Orders
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -345,5 +596,51 @@ const AddressForm = ({ setform, fetchAddress, selectedAddress }) => {
         Save Address
       </button>
     </form>
+  );
+};
+
+const Orderconfirm = ({ handlePlaceOrder }) => {
+  const [paymentMethod, setPaymentMethod] = useState("COD"); // default COD
+
+  return (
+    <div className="my-6 text-left flex flex-col space-y-4">
+      <label className="flex items-center cursor-pointer space-x-3">
+        <input
+          type="radio"
+          name="paymentMethod"
+          value="COD"
+          checked={paymentMethod === "COD"}
+          onChange={() => setPaymentMethod("COD")}
+          className="form-radio h-5 w-5 text-primary"
+        />
+        <span className="text-lg font-medium text-gray-900">
+          Cash on Delivery (COD)
+        </span>
+      </label>
+
+      <label className="flex items-center cursor-pointer space-x-3">
+        <input
+          type="radio"
+          name="paymentMethod"
+          value="Online"
+          checked={paymentMethod === "Online"}
+          onChange={() => setPaymentMethod("Online")}
+          className="form-radio h-5 w-5 text-primary"
+        />
+        <span className="text-lg font-medium text-gray-900">
+          Online Payment
+        </span>
+      </label>
+      <div className="mt-6">
+        <button
+          className="w-full bg-primary text-white py-3 rounded-lg hover:bg-gray-800 transition-all duration-200 cursor-pointer"
+          onClick={() => {
+            handlePlaceOrder(paymentMethod);
+          }}
+        >
+          Pay Now
+        </button>
+      </div>
+    </div>
   );
 };

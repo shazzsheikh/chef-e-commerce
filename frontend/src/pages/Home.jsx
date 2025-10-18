@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { API } from "../../api/api.js";
 import { GetInTouch } from "../component/get_in_touch";
 import { Testimonial } from "@/component/testimonial";
+import { useSearch } from "@/contextapi/searchcontext";
 
 const banner = [
   {
@@ -29,18 +30,19 @@ const banner = [
   },
 ];
 const Home = () => {
-  const [products, setProducts] = useState({});
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await API.get("/products/publicshowproducts");
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-    fetchData();
-  }, []);
+  const { allProducts: products } = useSearch();
+  // const [products, setProducts] = useState({});
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await API.get("/products/publicshowproducts");
+  //       setProducts(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching products:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
   return (
     <>
       <div className="md:space-y-6 space-y-2">

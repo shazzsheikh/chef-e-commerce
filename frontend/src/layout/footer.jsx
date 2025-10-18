@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   const [openSection, setOpenSection] = useState(null);
@@ -21,14 +22,14 @@ export default function Footer() {
 
           <p className="text-xl mt-6">
             Website created by{" "}
-            <a
-              href="https://www.linkedin.com/in/sohil-khan-14b071227"
+            <Link
+              to="https://www.linkedin.com/in/shahanshah0021/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#F5F5DC] hover:underline"
             >
               SHAHANSHAH
-            </a>
+            </Link>
           </p>
         </div>
 
@@ -54,19 +55,19 @@ export default function Footer() {
               }`}
             >
               <li>
-                <a href="/Our-Story" className="hover:underline">
+                <Link to="/home/ourstory" className="hover:underline">
                   Our Story
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/Term-of-use" className="hover:underline">
+                <Link to="home/termsofuse" className="hover:underline">
                   Terms of Use
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/#" className="hover:underline">
+                <Link to="/#" className="hover:underline">
                   Site Map
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -92,27 +93,27 @@ export default function Footer() {
               }`}
             >
               <li>
-                <a href="/contect-us" className="hover:underline">
+                <Link to="home/contactus" className="hover:underline">
                   Contact Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/Wholesale" className="hover:underline">
+                <Link to="/Wholesale" className="hover:underline">
                   Bulk Orders
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/Reward-points" className="hover:underline">
+                <Link to="/Reward-points" className="hover:underline">
                   Rewards
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/frequently-asked-questions"
+                <Link
+                  to="/frequently-asked-questions"
                   className="hover:underline"
                 >
                   FAQ's
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -138,36 +139,36 @@ export default function Footer() {
               }`}
             >
               <li>
-                <a
-                  href="https://www.instagram.com/anmolcraftandcreation/"
+                <Link
+                  to="https://www.instagram.com/anmolcraftandcreation/"
                   className="hover:underline"
                 >
                   Facebook
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="https://www.instagram.com/anmolcraftandcreation/"
+                <Link
+                  to="https://www.instagram.com/anmolcraftandcreation/"
                   className="hover:underline"
                 >
                   Instagram
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="https://github.com/Sohilkhan0021"
+                <Link
+                  to="https://github.com/Sohilkhan0021"
                   className="hover:underline"
                 >
                   Github
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="https://www.linkedin.com/in/sohil-khan-14b071227"
+                <Link
+                  to="https://www.linkedin.com/in/sohil-khan-14b071227"
                   className="hover:underline"
                 >
                   LinkedIn
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

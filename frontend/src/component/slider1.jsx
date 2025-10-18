@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
@@ -44,7 +44,7 @@ export default function ImageSliderTailwind({
           <h2 className="md:text-2xl text-sm sm:text-3xl font-bold text-gray-700 border-b-4 border-primary pb-1">
             {title} <span className="text-primary">products</span>
           </h2>
-          <Link to="home/viewsproducts"  state={{ products }} >
+          <Link to="/home/viewsproducts" state={{ products }}>
             <button className="btn-border text-sm sm:text-base font-medium text-primary ">
               View All
             </button>

@@ -1,7 +1,40 @@
-import React from "react";
+import { API } from "../../api/api";
+import React, { useState } from "react";
 import { HiPhone } from "react-icons/hi";
 import { HiEnvelopeOpen } from "react-icons/hi2";
 export const GetInTouch = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phonenumber: "",
+    companyname: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // form ka default reload rokega
+    try {
+      const response = await API.post("/getintouch", formData); // apni API url yahan use karo
+      alert(response.data.message || "Sent successfully!");
+      setFormData({
+        name: "",
+        email: "",
+        phonenumber: "",
+        companyname: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error(error);
+      alert("Server issues. Please try again later.");
+    }
+  };
   return (
     <div className="bg-[#F2F2F2] md:py-12 py-4 md:px-12 px-4 rounded-2xl flex items-center justify-center ">
       {/* <div className="bg-gray-50 flex items-center justify-center rounded-xl"> */}
@@ -49,36 +82,64 @@ export const GetInTouch = () => {
         </div>
 
         {/* Right Side */}
-        <form className="md:w-1/2 bg-gray-50 p-6 rounded-2xl space-y-3 shadow-inner">
+        <form
+          className="md:w-1/2 bg-gray-50 p-6 rounded-2xl space-y-3 shadow-inner"
+          onSubmit={handleSubmit}
+        >
           <input
             type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             placeholder="Name"
             className="bg-white w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
           <input
             type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             placeholder="Email"
             className="bg-white w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
           <input
             type="number"
+            name="phonenumber"
+            value={formData.phonenumber}
+            onChange={handleChange}
             placeholder="phone number"
             className="bg-white w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
           <input
             type="text"
             placeholder="company name"
+            name="companyname"
+            value={formData.companyname}
+            onChange={handleChange}
             className="bg-white w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
           <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
             placeholder="Type your message"
             rows="4"
             className="bg-white w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          ></textarea>
+          >
+            {" "}
+            required
+          </textarea>
 
           <button
             type="submit"
             className="flex items-center justify-center gap-2 bg-primary text-white py-3 px-6 rounded-full hover:bg-primary/60 transition cursor-pointer"
+            onClick={() => {
+              handleSubmit;
+            }}
           >
             <span>Get a Solution</span>
             <svg

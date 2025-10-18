@@ -9,7 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import { API } from "../../api/api";
 export default function Adminlogin() {
   const navigate = useNavigate();
 
@@ -25,7 +26,7 @@ export default function Adminlogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/api/admin/login", {
+      const res = await API.post("/admin/login", {
         email,
         password,
       });

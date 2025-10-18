@@ -65,6 +65,30 @@ function Login({ onSuccess }) {
       const { token, user } = res.data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
+
+      const cartData = localStorage.getItem("cart");
+      if (cartData && JSON.parse(cartData).length > 0) {
+        const usercart = JSON.parse(cartData).map((item) => ({
+          productId: item.id,
+          quantity: item.quantity,
+          size: item.size,
+        })); // convert string to objec
+        try {
+          const res = await API.post(
+            "/cart/setitems",
+            { items: usercart }, // Payload
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          console.log("Send data successfully", res);
+          localStorage.removeItem("cart");
+        } catch (err) {
+          console.error("Error sending cart data:", err);
+        }
+      }
       if (onSuccess) onSuccess(user);
     } catch (error) {
       console.error(

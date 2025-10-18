@@ -5,7 +5,7 @@ const orderSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // optional, if you have a User model
+      ref: "auth", // optional, if you have a User model
       required: true,
     },
     products: [
@@ -19,6 +19,10 @@ const orderSchema = new mongoose.Schema(
           required: true,
         },
         size: {
+          type: String,
+          required: true,
+        },
+        color: {
           type: String,
           required: true,
         },

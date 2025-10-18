@@ -23,6 +23,7 @@ export function AppSidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem("admintoken");
+    localStorage.removeItem("adminname");
     navigate("/");
   };
 
@@ -43,13 +44,18 @@ export function AppSidebar() {
       icon: Calendar,
     },
     {
-      title: "Search",
-      url: "#",
+      title: "Getintouch",
+      url: "/admin/getintouch",
+      icon: Search,
+    },
+    {
+      title: "Testimonial",
+      url: "/admin/testimonial",
       icon: Search,
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/admin/setting",
       icon: Settings,
     },
     {

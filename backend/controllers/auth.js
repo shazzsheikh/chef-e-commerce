@@ -16,9 +16,9 @@ exports.adminlogin = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
     const admintoken = jwt.sign(
-      { AdminId: admin._id, email: Admin.email },
+      { adminId: Admin._id, email: Admin.email, role: "admin" },
       process.env.ADMIN_TOKEN || "secretkey", // Make sure to set this in env
-      { expiresIn: "1h" }
+      { expiresIn: "1d" }
     );
     res.status(200).json({
       message: "admin login successful",
@@ -47,9 +47,9 @@ exports.Login = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
+      { userId: user._id, email: user.email, role: "user" },
       process.env.JWT_SECRET || "secretkey", // Make sure to set this in env
-      { expiresIn: "1h" }
+      { expiresIn: "1d" }
     );
     res.status(200).json({
       message: "login successful",

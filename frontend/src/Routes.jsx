@@ -1,38 +1,3 @@
-// import React, { useEffect } from "react";
-// import Header from "./layout/header";
-// import Footer from "./layout/footer";
-// import Home from "./pages/Home";
-// // import About from "./pages/About";
-// // import Contact from "./pages/Contact";
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-// useEffect(() => {
-//  const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     // Simulate data fetching or any loading
-//     const timer = setTimeout(() => setLoading(false), 3000);
-//     return () => clearTimeout(timer);
-//   }, []);
-// const AppRoutes = () => {
-//   return (
-//     <Router>
-//       <div className="app">
-//         <Header />
-//         <main className="content">
-//           <Routes>
-//             <Route path="/" element={<Home />} />
-//             {/* <Route path="/about" element={<About />} />
-//             <Route path="/contact" element={<Contact />} /> */}
-//           </Routes>
-//         </main>
-//         <Footer />
-//       </div>
-//     </Router>
-//   );
-// };
-
-// export default AppRoutes;
 import React, { useState, useEffect } from "react";
 import Header from "./layout/header";
 import Footer from "./layout/footer";
@@ -50,12 +15,19 @@ import ItemDetails from "./pages/itemsdetails";
 import Summarypage from "./pages/summarypage";
 
 // Import shadcn skeleton (adjust import path as per your setup)
-import { Head } from "../Admin/layout/Dashboard";
+import  UserDashboard  from "../Admin/layout/Dashboard";
 import Adminlogin from "../Admin/component/signin";
 import ProductManager from "../Admin/component/product";
 import { AdminOrders } from "../Admin/component/adminorders";
 import Layout from "../Admin/layout/layout";
 import { Viewsall } from "./pages/viewsall";
+import { Myorder } from "./pages/myorder";
+import { Touch } from "../Admin/component/touch";
+import OurStory from "./pages/ourstory";
+import Contact from "./pages/contactus";
+import TermOfUse from "./pages/termofuse";
+import { SearchProvider, useSearch } from "./contextapi/searchcontext";
+import SearchProduct from "./component/serachproduct";
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -66,14 +38,22 @@ function ScrollToTop() {
   return null;
 }
 
-// funciton for public route
+// function for public route
 function PublicLayout() {
+  const { query } = useSearch();
   return (
     <>
       <Header />
-      <main className="content">
+      <main className="content">{query ? <SearchProduct /> : <Outlet />}</main>
+      {/* <main className="content relative">
         <Outlet />
-      </main>
+        {query && (
+          <div className="absolute top-0 left-0 w-full z-50 bg-white max-h-full overflow-y-auto shadow">
+            <SearchProduct />
+          </div>
+        )}
+      </main> */}
+
       <Footer />
     </>
   );
@@ -114,16 +94,21 @@ const AppRoutes = () => {
           {/* <Route path="/products" element={<Products />} /> */}
           <Route path="/items/:id" element={<ItemDetails />} />
           <Route path="/home/checkout" element={<Summarypage />} />
-          <Route path="/admin/login" element={<Adminlogin />} />
+          <Route path="/myorders" element={<Myorder />} />
           <Route path="home/viewsproducts" element={<Viewsall />} />
+          <Route path="home/ourstory" element={<OurStory />} />
+          <Route path="home/contactus" element={<Contact />} />
+          <Route path="home/termsofuse" element={<TermOfUse />} />
+          <Route path="/admin/login" element={<Adminlogin />} />
         </Route>
 
         {/* Protected Admin Routes */}
         <Route element={<PrivateRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
-            <Route path="home" element={<Head />} />
+            <Route path="home" element={<UserDashboard />} />
             <Route path="products" element={<ProductManager />} />
             <Route path="orders" element={<AdminOrders />} />
+            <Route path="getintouch" element={<Touch />} />
           </Route>
         </Route>
 

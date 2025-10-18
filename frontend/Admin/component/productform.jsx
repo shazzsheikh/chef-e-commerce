@@ -84,6 +84,7 @@ export const ProductForm = ({ setShowForm, setlocalproducts }) => {
       const res = await API.post("/products", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       });
       alert("product add");

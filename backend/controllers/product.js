@@ -69,7 +69,7 @@ exports.Publicshowproducts = async (req, res) => {
   try {
     const productsall = await product
       .find()
-      .select("name price image clothType")
+      .select("name price image clothType size")
       .sort({ createdAt: -1 });
     //all categaries nikala
     const categories = await product.distinct("clothType");
@@ -78,7 +78,7 @@ exports.Publicshowproducts = async (req, res) => {
       categories.map((cat) =>
         product
           .find({ clothType: cat })
-          .select("name price image clothType")
+          .select("name price image clothType size")
           .sort({ createdAt: -1 })
       )
     );
@@ -147,5 +147,19 @@ exports.Deleteproduct = async (req, res) => {
       message: "failed to delete product",
       error: error.message,
     });
+  }
+};
+
+exports.Categoryfilter = async (req, res) => {
+  const { category } = req.params;
+  try {
+    const productsByCategory = await product
+      .find({ clothType: category })
+      .select("name price image clothType size")
+      .sort({ createdAt: -1 });
+    res.status(200).json(productsByCategory);
+  } catch (error) {
+    console.error("error fetching products by category", error);
+    res.status(500).json({ message: "server error" });
   }
 };

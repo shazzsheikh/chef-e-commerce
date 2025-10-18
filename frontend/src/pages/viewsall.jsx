@@ -1,3 +1,4 @@
+import { API } from "../../api/api";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -11,27 +12,61 @@ export const Viewsall = () => {
 
   const handleaddtocard = async (e, product) => {
     e.stopPropagation(); // Prevent card click from firing
-
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existing = cart.findIndex((item) => item.id === product._id);
-
-    if (existing >= 0) {
-      cart[existing].quantity += 1;
+    const token = localStorage.getItem("token");
+    console.log(products);
+    if (token) {
+      const itemsforbackend = [
+        {
+          productId: product._id,
+          quantity: 1,
+          size: product.size[0],
+        },
+      ];
+      try {
+        const response = await API.post(
+          "/cart/setitems",
+          {
+            items: itemsforbackend,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // 👈 Token must be sent
+            },
+          }
+        );
+        alert("cart was succesully add");
+        setAddedItems((prev) => ({
+          ...prev,
+          [product._id]: true,
+        }));
+        console.log("Cart synced with server:", response.data);
+      } catch (err) {
+        alert("cart was not  add somthing was worng");
+        console.error("Error syncing cart:", err.response?.data || err.message);
+      }
     } else {
-      cart.push({
-        id: product._id,
-        name: product.name,
-        price: product.price,
-        img: product.image[0],
-        quantity: 1,
-      });
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existing = cart.findIndex((item) => item.id === product._id);
+
+      if (existing >= 0) {
+        cart[existing].quantity += 1;
+      } else {
+        cart.push({
+          id: product._id,
+          name: product.name,
+          price: product.price,
+          size: product.size[0],
+          img: product.image[0],
+          quantity: 1,
+        });
+      }
+      // Cart ko wapas localStorage mein save karo
+      localStorage.setItem("cart", JSON.stringify(cart));
+      setAddedItems((prev) => ({
+        ...prev,
+        [product._id]: true,
+      }));
     }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    console.log("Cart updated in localStorage", cart);
-
-    // Show added effect
-    setAddedItems((prev) => ({ ...prev, [product._id]: true }));
   };
 
   return (

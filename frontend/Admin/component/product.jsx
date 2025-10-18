@@ -4,6 +4,7 @@ import { API } from "../../api/api";
 import { useEffect } from "react";
 const ProductManager = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const token = localStorage.getItem("admintoken");
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [localproducts, setlocalproducts] = useState([]);
@@ -13,7 +14,11 @@ const ProductManager = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const prob = await API.get("/products/adminshowproducts");
+        const prob = await API.get("/products/adminshowproducts", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setlocalproducts(prob.data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -29,7 +34,11 @@ const ProductManager = () => {
   const handleedit = async (id) => {};
   const handledelete = async (id) => {
     try {
-      const res = await API.delete(`/products/${id}`);
+      const res = await API.delete(`/products/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (res.data.success) {
         alert("Product deleted successfully ✅");
         setlocalproducts((prev) => prev.filter((prod) => prod._id !== id));
