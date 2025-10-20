@@ -7,23 +7,39 @@ const usertokenverify = require("./middlewares/usertokenverify.js");
 
 // const { upload } = require("./utils/cloudconnection.js");
 const app = express();
+const allowedOrigins = [
+  "https://chef-e-commerce.vercel.app",
+  "http://localhost:5173",
+  "https://lineally-unenervated-eusebia.ngrok-free.dev",
+];
+
 app.use(
   cors({
-    origin: "https://chef-e-commerce.vercel.app", // your frontend URL
-    methods: [
-      "GET",
-      "POST",
-      "PUT",
-      "DELETE",
-      "PATCH",
-      "OPTIONS",
-      "HEAD",
-      "CONNECT",
-      "TRACE",
-    ],
-    credentials: true, // if you use cookies/auth
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, origin); // Yahan sahi origin return karo
+      } else {
+        callback(new Error("CORS policy: This origin is not allowed."));
+      }
+    },
+    credentials: true,
   })
 );
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin,X-Requested-With,Content-Type,Accept,Authorization"
+  );
+  next();
+});
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

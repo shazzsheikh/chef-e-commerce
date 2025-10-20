@@ -3,7 +3,10 @@ import axios from "axios";
 export const API = axios.create({
   //   baseURL: "https://your-backend.onrender.com/api", // 🛠️ yahan apna backend URL daal
   baseURL: "https://lineally-unenervated-eusebia.ngrok-free.dev/api",
-  withCredentials: true, // agar cookies/session token use ho
+  withCredentials: true,
+  headers: {
+    "ngrok-skip-browser-warning": "true", // ✅ This bypasses ngrok splash
+  },
 });
 
 export const AdminAPI = axios.create({

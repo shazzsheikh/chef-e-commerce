@@ -15,7 +15,6 @@ export const SearchProvider = ({ children }) => {
     const fetchProducts = async () => {
       try {
         const res = await API.get("/products/publicshowproducts");
-
         setAllProducts(res.data);
       } catch (err) {
         console.error("Error fetching products:", err);
