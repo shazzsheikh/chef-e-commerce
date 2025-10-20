@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const API = axios.create({
   //   baseURL: "https://your-backend.onrender.com/api", // 🛠️ yahan apna backend URL daal
-  baseURL: "  https://pretty-papers-enter.loca.lt",
+  baseURL: "https://lineally-unenervated-eusebia.ngrok-free.dev/api ",
   withCredentials: true, // agar cookies/session token use ho
 });
 
