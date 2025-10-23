@@ -3,7 +3,7 @@ import React from "react";
 export default function TermOfUse() {
   return (
     <>
-      <section className="bg-[#3e402d] text-white py-20">
+      <section className="bg-[#3e402d] text-white md:py-20 py-12">
         <div className="w-[85%] mx-auto">
           <div className="max-w-full md:max-w-[50%]">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 leading-snug">
@@ -14,7 +14,7 @@ export default function TermOfUse() {
         </div>
       </section>
 
-      <section className="bg-[#F9F2EA] py-16">
+      <section className="bg-[#F2F2F2]/60 md:py-16 py-8">
         <div className="w-[90%] md:w-[85%] mx-auto">
           <div>
             <p className="text-[#2e2f1e] text-base md:text-lg leading-[1.8] mt-6">
@@ -27,40 +27,40 @@ export default function TermOfUse() {
             <p className="text-[#2e2f1e] text-base md:text-lg leading-[1.8] mt-6">
               In these Terms, "you", "User" refers to any individual accessing
               our website and services, and "we", "us", "our" refers to{" "}
-              <span className="font-semibold">Chef Clought</span> and its
-              affiliates, team members, or service providers.
+              <span className="font-semibold text-primary">City Fab</span> and
+              its affiliates, team members, or service providers.
             </p>
 
             <p className="text-[#2e2f1e] text-base md:text-lg leading-[1.8] mt-6">
               These terms apply to your use of www.chefclought.com and any
               associated URLs ("Site"). The Site is owned and operated by{" "}
-              <span className="font-semibold">Chef Clought</span>, a culinary
-              business registered in India. These Terms govern all use of the
-              Site and any services or content offered through it.
+              <span className="font-semibold text-primary">City Fab</span>, a
+              culinary business registered in India. These Terms govern all use
+              of the Site and any services or content offered through it.
             </p>
 
             <p className="text-[#2e2f1e] text-base md:text-lg leading-[1.8] mt-6">
               The information, images, services, and content on the Site may
               contain typographical or technical errors.{" "}
-              <span className="font-semibold">Chef Clought</span> reserves the
-              right to improve or modify any content at any time. You should not
-              rely on information on this site as a substitute for personal,
-              health, legal, or dietary advice.
+              <span className="font-semibold text-primary">City Fab</span>{" "}
+              reserves the right to improve or modify any content at any time.
+              You should not rely on information on this site as a substitute
+              for personal, health, legal, or dietary advice.
             </p>
 
             <p className="text-[#2e2f1e] text-base md:text-lg leading-[1.8] mt-6">
-              <span className="font-semibold">Chef Clought</span> provides its
-              content and services "as is" without any warranties. We disclaim
-              all express or implied warranties including those related to
-              fitness for a particular purpose or accuracy.
+              <span className="font-semibold text-primary">City Fab</span>{" "}
+              provides its content and services "as is" without any warranties.
+              We disclaim all express or implied warranties including those
+              related to fitness for a particular purpose or accuracy.
             </p>
 
             <p className="text-[#2e2f1e] text-base md:text-lg leading-[1.8] mt-6">
               The use of www.chefclought.com is conditional upon your acceptance
               of all the terms, conditions, and policies outlined here and/or
               elsewhere on the site.{" "}
-              <span className="font-semibold">Chef Clought</span> may, at its
-              discretion, refuse service or access without notice.
+              <span className="font-semibold text-primary">City Fab</span> may,
+              at its discretion, refuse service or access without notice.
             </p>
 
             <p className="text-[#2e2f1e] text-base md:text-lg leading-[1.8] mt-6">
@@ -87,8 +87,9 @@ export default function TermOfUse() {
 
             <p className="text-[#2e2f1e] text-base md:text-lg leading-[1.8] mt-6">
               All invoices and communication will be issued in the name of{" "}
-              <span className="font-semibold">Chef Clought</span> based on the
-              billing details provided by the user at checkout or registration.
+              <span className="font-semibold text-primary">City Fab</span> based
+              on the billing details provided by the user at checkout or
+              registration.
             </p>
 
             <p className="text-[#2e2f1e] text-base md:text-lg leading-[1.8] mt-6">
@@ -101,8 +102,9 @@ export default function TermOfUse() {
               By using this site, you confirm that all personal details you
               provide are accurate and up-to-date. If any information is found
               to be false or misleading,{" "}
-              <span className="font-semibold">Chef Clought</span> reserves the
-              right to suspend or terminate your access to our services.
+              <span className="font-semibold text-primary">City Fab</span>{" "}
+              reserves the right to suspend or terminate your access to our
+              services.
             </p>
           </div>
         </div>

@@ -2,44 +2,23 @@ import React, { useState } from "react";
 import { Phone } from "lucide-react";
 import toast from "react-hot-toast";
 import { FaFacebook, FaInstagram, FaLinkedin, FaGithub } from "react-icons/fa";
+import { GetInTouch } from "@/component/get_in_touch";
 
 export default function Contact() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    country: "",
-    message: "",
-  });
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      if (res.ok) {
-        toast.success("Your message has been sent!");
-        setForm({ name: "", email: "", phone: "", country: "", message: "" });
-      } else {
-        toast.error("Something went wrong. Please try again.");
-      }
-    } catch (error) {
-      toast.error("Error submitting form.");
-    }
-  };
-
   return (
     <>
+      <section className="bg-[#3e402d] text-white md:py-20 py-12">
+        <div className="w-[85%] mx-auto">
+          <div className="max-w-full md:max-w-[50%]">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 leading-snug">
+              Contact Us
+            </h2>
+            <hr className="w-[100px] border-t-2 border-white mb-6" />
+          </div>
+        </div>
+      </section>
       {/* Contact Info */}
-      <section className="bg-[#f7f0e9] py-16">
+      {/* <section className="bg-[#F2F2F2] md:py-16 py-12">
         <div className="w-[90%] md:w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <div className="flex items-center gap-4 mb-8">
@@ -109,10 +88,10 @@ export default function Contact() {
             />
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Contact Form */}
-      <section className="bg-[#f7f0e9] py-16">
+      {/* <section className="bg-[#F2F2F2] py-16">
         <div className="w-[90%] md:w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <div className="flex items-center gap-4 mb-8">
@@ -174,7 +153,23 @@ export default function Contact() {
             </div>
           </div>
         </div>
+      </section> */}
+      <section className="bg-[#F2F2F2]/60 md:py-16 py-12 my-2">
+        <div className="w-[90%] md:w-[85%] mx-auto text-center">
+          <h2 className="text-3xl md:text-5xl font-bold text-primary mb-8">
+            We're Here to Help!
+          </h2>
+          <p className="text-[#2e2f1e] text-base md:text-lg leading-[1.8] mb-6">
+            Whether you have questions about our services, need assistance with
+            a booking, or want to explore collaboration opportunities, our team
+            is ready to assist you. Reach out to us via email at{" "}
+            <span className="font-semibold">info@cityfab.com</span> or call us
+            at <span className="font-semibold">+91 8302346860</span>. We look
+            forward to connecting with you!
+          </p>
+        </div>
       </section>
+      <GetInTouch />
     </>
   );
 }

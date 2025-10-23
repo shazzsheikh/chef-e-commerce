@@ -70,7 +70,7 @@ export const Viewsall = () => {
   };
 
   return (
-    <div className="md:py-4 py-3 md:px-12 px-6">
+    <div className="md:py-4 py-3 md:px-12 px-3">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 gap-3">
         {products.map((p) => {
           const isAdded = addedItems[p._id];

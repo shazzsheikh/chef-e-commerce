@@ -32,6 +32,7 @@ app.use(express.json());
 
 app.use("/api", require("./routes/auth.js"));
 app.use("/api/auth", require("./routes/auth.js"));
+app.use("/api/forgetpassword", require("./routes/forgetpassword.js"));
 
 app.use("/api/products", require("./routes/products.js"));
 app.use("/api/cart", usertokenverify, require("./routes/cart.js"));

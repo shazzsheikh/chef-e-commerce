@@ -128,7 +128,7 @@ const Header = () => {
                             "user",
                             JSON.stringify(userData)
                           );
-                          setUser(userData); // 🔥 yeh important hai
+                          setUser(userData); //   important hai
                           setOpen(false); // modal close
                         }}
                       />

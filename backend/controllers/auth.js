@@ -2,6 +2,7 @@ const auth = require("../models/authmodel.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const admin = require("../models/adminmodel.js");
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 exports.adminlogin = async (req, res) => {
@@ -173,3 +174,5 @@ exports.deleteprofile = async (req, res) => {
     console.error("Error deleting task:", error);
   }
 };
+
+

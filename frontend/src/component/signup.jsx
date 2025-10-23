@@ -3,8 +3,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { API } from "../../api/api";
+import ForgetPassword from "./forgetpassword";
 export const Signup = ({ onSuccess }) => {
   const [activetab, setactivetab] = useState("login");
   return (
@@ -50,6 +51,7 @@ export const Signup = ({ onSuccess }) => {
 function Login({ onSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [forgetPassword, setForgetPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -99,9 +101,20 @@ function Login({ onSuccess }) {
     }
   };
 
+  if (forgetPassword) {
+    return (
+      <div className="w-full flex items-center justify-center">
+        <div className="w-full  p-6  bg-white rounded-2xl shadow-lg">
+          <h2 className="text-2xl font-bold text-center">Reset Password</h2>
+          <ForgetPassword setForgetPassword={setForgetPassword} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full flex items-center justify-center">
-      <div className="w-full  p-6 bg-white rounded-2xl shadow-lg">
+      <div className="w-full  p-6  bg-white rounded-2xl shadow-lg">
         <h2 className="text-2xl font-bold text-center">Create an account</h2>
         <p className="mt-1 text-sm text-gray-500 text-center">
           Enter your email below to create your account
@@ -151,12 +164,22 @@ function Login({ onSuccess }) {
 
           <button
             type="submit"
-            className="w-full py-2 text-white bg-black rounded-lg hover:bg-gray-900"
+            className="w-full py-2 text-white bg-black rounded-lg hover:bg-gray-900 cursor-pointer"
           >
-            Create account
+            Login
           </button>
         </form>
+
+        <div className="flex justify-center">
+          <button
+            className="mt-4 text-sm text-gray-500 hover:underline hover:text-primary cursor-pointer"
+            onClick={() => setForgetPassword(true)}
+          >
+            Forgot your password?
+          </button>
+        </div>
       </div>
+      {/* {forgetPassword && <ForgetPassword />} */}
     </div>
   );
 }

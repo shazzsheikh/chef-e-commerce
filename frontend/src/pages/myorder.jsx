@@ -77,7 +77,7 @@ export const Myorder = () => {
                   Total: ₹{order.total}
                 </p>
               </div>
-              ;{/* Status timeline: circles left, labels right */}
+              {/* Status timeline: circles left, labels right */}
               <div className="mb-6">
                 <div
                   className="
@@ -123,11 +123,11 @@ export const Myorder = () => {
                               }`}
                             />
                             {/* Horizontal line for desktop */}
-                            <div
+                            {/* <div
                               className={`hidden sm:block absolute top-3 left-full ml-3 h-0.5 w-full ${
                                 active ? statusColors[step] : "bg-gray-300"
                               }`}
-                            />
+                            /> */}
                           </>
                         )}
                       </div>
