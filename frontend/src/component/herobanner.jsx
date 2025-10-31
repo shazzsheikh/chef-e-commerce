@@ -1,4 +1,8 @@
+import { useSearch } from "@/contextapi/searchcontext";
+import { Link } from "react-router-dom";
+
 const HeroBanner = () => {
+  const { allProducts: products } = useSearch();
   return (
     <section
       className="bg-black md:py-12 py-4"
@@ -30,10 +34,14 @@ const HeroBanner = () => {
               embroidery available
             </li>
           </ul>
-
-          <button className="mt-8 bg-red-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-red-700 transition">
-            SHOP NOW →
-          </button>
+          <Link
+            to="/home/viewsproducts"
+            state={{ products: products.all || [] }}
+          >
+            <button className="mt-8 bg-red-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-red-700 transition">
+              SHOP NOW →
+            </button>
+          </Link>
         </div>
 
         {/* Right side empty, background image is on section */}

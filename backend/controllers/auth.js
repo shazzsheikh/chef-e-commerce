@@ -174,5 +174,3 @@ exports.deleteprofile = async (req, res) => {
     console.error("Error deleting task:", error);
   }
 };
-
-

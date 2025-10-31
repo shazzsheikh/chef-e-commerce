@@ -1,10 +1,7 @@
 import CraftSection from "@/component/client";
 import ProductCard from "../component/card";
-// import  from "../component/card";
 import HeroBanner from "../component/herobanner";
 import ImageSliderTailwind from "../component/slider1";
-import { useEffect, useState } from "react";
-import { API } from "../../api/api.js";
 import { GetInTouch } from "../component/get_in_touch";
 import { Testimonial } from "@/component/testimonial";
 import { useSearch } from "@/contextapi/searchcontext";

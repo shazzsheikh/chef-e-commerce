@@ -15,7 +15,7 @@ import ItemDetails from "./pages/itemsdetails";
 import Summarypage from "./pages/summarypage";
 
 // Import shadcn skeleton (adjust import path as per your setup)
-import  UserDashboard  from "../Admin/layout/Dashboard";
+import UserDashboard from "../Admin/layout/Dashboard";
 import Adminlogin from "../Admin/component/signin";
 import ProductManager from "../Admin/component/product";
 import { AdminOrders } from "../Admin/component/adminorders";
@@ -28,6 +28,9 @@ import Contact from "./pages/contactus";
 import TermOfUse from "./pages/termofuse";
 import { SearchProvider, useSearch } from "./contextapi/searchcontext";
 import SearchProduct from "./component/serachproduct";
+import BulkOrder from "./pages/bulkorder";
+import Faq from "./pages/faq";
+import EditProfile from "./pages/editprofile";
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -95,10 +98,13 @@ const AppRoutes = () => {
           <Route path="/items/:id" element={<ItemDetails />} />
           <Route path="/home/checkout" element={<Summarypage />} />
           <Route path="/myorders" element={<Myorder />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="home/viewsproducts" element={<Viewsall />} />
           <Route path="home/ourstory" element={<OurStory />} />
           <Route path="home/contactus" element={<Contact />} />
           <Route path="home/termsofuse" element={<TermOfUse />} />
+          <Route path="home/bulkorder" element={<BulkOrder />} />
+          <Route path="home/frequently-asked-questions" element={<Faq />} />
           <Route path="/admin/login" element={<Adminlogin />} />
         </Route>
 

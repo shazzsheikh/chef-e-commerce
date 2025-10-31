@@ -52,6 +52,10 @@ export default function SummaryPage() {
 
   const navigate = useNavigate();
   const handlePlaceOrder = async (paymentMethod) => {
+    if (address === null || address === undefined) {
+      alert("Please add address to proceed");
+      return;
+    }
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       if (!user) {

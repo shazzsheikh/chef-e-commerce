@@ -114,14 +114,10 @@ const Header = () => {
                 <DialogTrigger>
                   <span className="ml-2 mx-4 cursor-pointer">Login</span>
                 </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader class={"m-0 p-0"}>
+                <DialogContent aria-describedby={undefined} s>
+                  <DialogHeader className="m-0 p-0">
                     <DialogTitle></DialogTitle>
-                    <DialogDescription
-                      className={
-                        "p-0 m-0 flex flex-col justify-center align-center"
-                      }
-                    >
+                    <DialogDescription className="p-0 m-0 flex flex-col justify-center align-center">
                       <Signup
                         onSuccess={(userData) => {
                           localStorage.setItem(
@@ -147,7 +143,7 @@ const Header = () => {
               <SheetContent side="right" className="w-[95%] md:w-1/2">
                 <SheetHeader>
                   <SheetTitle>Cart</SheetTitle>
-                  <SheetDescription>
+                  <SheetDescription asChild>
                     <div className="mt-2 max-h-[85vh] overflow-y-auto pr-1">
                       <CartItem setopencart={setopencart} />
                     </div>
@@ -237,7 +233,7 @@ const UserUI = ({ user, setUser, setQuery }) => {
             <NavigationMenuContent className="bg-white shadow rounded">
               <NavigationMenuLink asChild>
                 <Link
-                  to="/profile"
+                  to="/edit-profile"
                   className="block px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
                   onClick={() => setQuery("")}
                 >

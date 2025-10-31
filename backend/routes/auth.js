@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const tokenverify = require("../middlewares/usertokenverify.js");
 const {
   Login,
   signup,
@@ -10,9 +11,9 @@ const {
 
 router.post("/login", Login);
 
-router.get("/user/address/:id", Getaddress);
+router.get("/user/address/:id", Getaddress); //get address
 
-router.patch("/user/:id/address", Addaddress);
+router.patch("/user/:id/address", Addaddress); //address update on user profile
 
 router.post("/", signup);
 

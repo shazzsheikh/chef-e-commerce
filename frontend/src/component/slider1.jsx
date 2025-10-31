@@ -53,7 +53,7 @@ export default function ImageSliderTailwind({
         <Swiper
           modules={[Autoplay, Navigation]}
           spaceBetween={16}
-          loop
+          loop={products.length > 4}
           autoplay={
             autoplay ? { delay: 2000, disableOnInteraction: false } : false
           }

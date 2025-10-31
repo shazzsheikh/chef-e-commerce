@@ -98,18 +98,18 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/Wholesale" className="hover:underline">
+                <Link to="home/bulkorder" className="hover:underline">
                   Bulk Orders
                 </Link>
               </li>
-              <li>
-                <Link to="/Reward-points" className="hover:underline">
+              {/* <li>
+                <Link to="home/reward-points" className="hover:underline">
                   Rewards
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
-                  to="/frequently-asked-questions"
+                  to="home/frequently-asked-questions"
                   className="hover:underline"
                 >
                   FAQ's
