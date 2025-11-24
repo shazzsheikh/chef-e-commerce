@@ -114,7 +114,7 @@ const Header = () => {
                 <DialogTrigger>
                   <span className="ml-2 mx-4 cursor-pointer">Login</span>
                 </DialogTrigger>
-                <DialogContent aria-describedby={undefined} s>
+                <DialogContent aria-describedby={undefined} >
                   <DialogHeader className="m-0 p-0">
                     <DialogTitle></DialogTitle>
                     <DialogDescription className="p-0 m-0 flex flex-col justify-center align-center">

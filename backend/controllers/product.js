@@ -14,7 +14,7 @@ exports.Addproducts = async (req, res) => {
     material,
     status,
   } = req.body;
-
+  
   try {
     const size = JSON.parse(req.body.size || "[]");
     const productdetails = JSON.parse(req.body.productdetails || "[]");

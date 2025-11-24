@@ -18,6 +18,7 @@ export const ProductForm = ({ setShowForm, setlocalproducts }) => {
     productdetails: [],
     specification: [],
   });
+  const token = localStorage.getItem("adminToken");
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "size") {
@@ -52,7 +53,7 @@ export const ProductForm = ({ setShowForm, setlocalproducts }) => {
     formData.append("color", product.color);
     formData.append("material", product.material);
     formData.append("status", product.status);
-    // File
+
     if (product.image && product.image.length > 0) {
       product.image.forEach((file) => {
         formData.append("image", file); // same field name for all

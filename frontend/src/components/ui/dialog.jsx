@@ -98,14 +98,16 @@ function DialogTitle({ className, ...props }) {
   );
 }
 
-function DialogDescription({ className, ...props }) {
+function DialogDescription({ className, children, ...props }) {
   return (
-    <DialogPrimitive.Description
-      asChild
-      data-slot="dialog-description"
-      className={cn("text-muted-foreground text-sm", className)}
-      {...props}
-    />
+    <DialogPrimitive.Description asChild {...props}>
+      <div
+        data-slot="dialog-description"
+        className={cn("text-muted-foreground text-sm", className)}
+      >
+        {children}
+      </div>
+    </DialogPrimitive.Description>
   );
 }
 
