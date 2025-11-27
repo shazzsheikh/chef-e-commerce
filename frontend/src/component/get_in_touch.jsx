@@ -10,7 +10,7 @@ export const GetInTouch = () => {
     companyname: "",
     message: "",
   });
-
+  const [errors, setErrors] = useState({}); 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -19,7 +19,10 @@ export const GetInTouch = () => {
     }));
   };
   const handleSubmit = async (e) => {
-    e.preventDefault(); // form ka default reload rokega
+    e.preventDefault();
+    if (!validateForm(formData,setErrors)) {
+      return;
+    }
     try {
       const response = await API.post("/getintouch", formData); // apni API url yahan use karo
       alert(response.data.message || "Sent successfully!");
@@ -95,6 +98,7 @@ export const GetInTouch = () => {
             className="bg-white w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
+          {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
           <input
             type="email"
             name="email"
@@ -104,8 +108,11 @@ export const GetInTouch = () => {
             className="bg-white w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
+          {errors.email && (
+            <p className="text-red-600 text-sm">{errors.email}</p>
+          )}
           <input
-            type="number"
+            type="text"
             name="phonenumber"
             value={formData.phonenumber}
             onChange={handleChange}
@@ -113,6 +120,9 @@ export const GetInTouch = () => {
             className="bg-white w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
+          {errors.phonenumber && (
+            <p className="text-red-600 text-sm">{errors.phonenumber}</p>
+          )}
           <input
             type="text"
             placeholder="company name"
@@ -122,6 +132,9 @@ export const GetInTouch = () => {
             className="bg-white w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
+          {errors.companyname && (
+            <p className="text-red-600 text-sm">{errors.companyname}</p>
+          )}
           <textarea
             name="message"
             value={formData.message}
@@ -129,17 +142,14 @@ export const GetInTouch = () => {
             placeholder="Type your message"
             rows="4"
             className="bg-white w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {" "}
             required
-          </textarea>
-
+          ></textarea>
+          {errors.message && (
+            <p className="text-red-600 text-sm">{errors.message}</p>
+          )}
           <button
             type="submit"
             className="flex items-center justify-center gap-2 bg-primary text-white py-3 px-6 rounded-full hover:bg-primary/60 transition cursor-pointer"
-            onClick={() => {
-              handleSubmit;
-            }}
           >
             <span>Get a Solution</span>
             <svg
@@ -161,4 +171,36 @@ export const GetInTouch = () => {
       </div>
     </div>
   );
+};
+
+const validateForm = (formData,setErrors) => {
+  let newErrors = {};
+
+  if (!formData.name.trim()) {
+    newErrors.name = "Name is required";
+  } else if (!/^[A-Za-z\s]+$/.test(formData.name)) {
+    newErrors.name = "Name cannot contain numbers or special characters";
+  }
+
+  if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    newErrors.email = "Enter a valid email";
+  }
+
+  if (!formData.phonenumber.match(/^[0-9]{10}$/)) {
+    newErrors.phonenumber = "Phone number must be 10 digits";
+  }
+
+  if (!formData.companyname.trim()) {
+    newErrors.companyname = "Company name is required";
+  } else if (!/^[A-Za-z\s]+$/.test(formData.name)) {
+    newErrors.name = "Name cannot contain numbers or special characters";
+  }
+
+  if (!formData.message.trim()) {
+    newErrors.message = "Message cannot be empty";
+  }
+
+  setErrors(newErrors);
+
+  return Object.keys(newErrors).length === 0; // true agar koi error nahi
 };

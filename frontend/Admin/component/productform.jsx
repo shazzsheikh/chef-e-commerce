@@ -18,7 +18,7 @@ export const ProductForm = ({ setShowForm, setlocalproducts }) => {
     productdetails: [],
     specification: [],
   });
-  const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("admintoken");
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "size") {
@@ -240,14 +240,14 @@ export const ProductForm = ({ setShowForm, setlocalproducts }) => {
         </select>
         <textarea
           name="productdetails"
-          placeholder="productdetails please add multiple through to the , seprated "
+          placeholder="productdetails please add multiple through to the .(dot) seprated "
           className="border p-2 rounded col-span-1 md:col-span-2"
           value={product.productdetails}
           onChange={handleChange}
         />
         <textarea
           name="specification"
-          placeholder="specification they are sepreated by the , remember that"
+          placeholder="specification they are sepreated by the .(dot) remember that"
           className="border p-2 rounded col-span-1 md:col-span-2"
           value={product.specification}
           onChange={handleChange}
