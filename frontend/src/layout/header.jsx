@@ -21,10 +21,10 @@ import {
 import CartItem from "@/component/cartitem";
 import { Signup } from "../component/signup";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaUser } from "react-icons/fa"; // User icon
+import { FaUser } from "react-icons/fa";
 
 const Header = () => {
-  const { query, setQuery, filteredProducts } = useSearch();
+  const { query, setQuery } = useSearch();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -114,7 +114,7 @@ const Header = () => {
                 <DialogTrigger>
                   <span className="ml-2 mx-4 cursor-pointer">Login</span>
                 </DialogTrigger>
-                <DialogContent aria-describedby={undefined} >
+                <DialogContent aria-describedby={undefined}>
                   <DialogHeader className="m-0 p-0">
                     <DialogTitle></DialogTitle>
                     <DialogDescription className="p-0 m-0 flex flex-col justify-center align-center">

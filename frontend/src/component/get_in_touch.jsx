@@ -10,7 +10,7 @@ export const GetInTouch = () => {
     companyname: "",
     message: "",
   });
-  const [errors, setErrors] = useState({}); 
+  const [errors, setErrors] = useState({});
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -20,7 +20,7 @@ export const GetInTouch = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm(formData,setErrors)) {
+    if (!validateForm(formData, setErrors)) {
       return;
     }
     try {
@@ -173,7 +173,7 @@ export const GetInTouch = () => {
   );
 };
 
-const validateForm = (formData,setErrors) => {
+const validateForm = (formData, setErrors) => {
   let newErrors = {};
 
   if (!formData.name.trim()) {

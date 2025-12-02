@@ -452,6 +452,7 @@ const AddressForm = ({ setform, fetchAddress, selectedAddress }) => {
     postalCode: "",
     country: "India",
   });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (selectedAddress) {
@@ -468,6 +469,9 @@ const AddressForm = ({ setform, fetchAddress, selectedAddress }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const error = addressValidation(formData, setErrors);
+    if (error) return;
+    // setLoading(true);
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const userId = user?._id || user?.id;
@@ -515,6 +519,9 @@ const AddressForm = ({ setform, fetchAddress, selectedAddress }) => {
             required
             className="w-full border rounded px-3 py-2"
           />
+          {errors.fullName && (
+            <p className="text-red-600 text-sm">{errors.fullName}</p>
+          )}
         </div>
         <div className="w-full">
           <label className="block mb-1 text-sm font-medium">Phone</label>
@@ -526,6 +533,9 @@ const AddressForm = ({ setform, fetchAddress, selectedAddress }) => {
             required
             className="w-full border rounded px-3 py-2"
           />
+          {errors.phone && (
+            <p className="text-red-600 text-sm">{errors.phone}</p>
+          )}
         </div>
       </div>
 
@@ -540,6 +550,9 @@ const AddressForm = ({ setform, fetchAddress, selectedAddress }) => {
             required
             className="w-full border rounded px-3 py-2"
           />
+          {errors.street && (
+            <p className="text-red-600 text-sm">{errors.street}</p>
+          )}
         </div>
         <div className="w-full">
           <label className="block mb-1 text-sm font-medium">City</label>
@@ -551,6 +564,7 @@ const AddressForm = ({ setform, fetchAddress, selectedAddress }) => {
             required
             className="w-full border rounded px-3 py-2"
           />
+          {errors.city && <p className="text-red-600 text-sm">{errors.city}</p>}
         </div>
       </div>
 
@@ -568,6 +582,9 @@ const AddressForm = ({ setform, fetchAddress, selectedAddress }) => {
             <option value="Delhi">Delhi</option>
             <option value="Delhi/NCR">Delhi/NCR</option>
           </select>
+          {errors.state && (
+            <p className="text-red-600 text-sm">{errors.state}</p>
+          )}
         </div>
         <div className="w-full">
           <label className="block mb-1 text-sm font-medium">Postal Code</label>
@@ -579,6 +596,9 @@ const AddressForm = ({ setform, fetchAddress, selectedAddress }) => {
             required
             className="w-full border rounded px-3 py-2"
           />
+          {errors.postalCode && (
+            <p className="text-red-600 text-sm">{errors.postalCode}</p>
+          )}
         </div>
       </div>
 
@@ -591,6 +611,9 @@ const AddressForm = ({ setform, fetchAddress, selectedAddress }) => {
           readOnly
           className="w-full border rounded px-3 py-2 bg-gray-100"
         />
+        {errors.country && (
+          <p className="text-red-600 text-sm">{errors.country}</p>
+        )}
       </div>
 
       <button
@@ -647,4 +670,47 @@ const Orderconfirm = ({ handlePlaceOrder }) => {
       </div>
     </div>
   );
+};
+
+const addressValidation = (address, setErrors) => {
+  const errors = [];
+
+  if (
+    !address.fullName?.trim() ||
+    address.fullName.trim().length < 2 ||
+    /\d|[^a-zA-Z\s]/.test(address.fullName)
+  )
+    errors.fullName(
+      "Full Name least 2 letters, without numbers or special characters."
+    );
+
+  if (!address.phone || address.phone.trim() === "") {
+    errors.phone("Phone number is required.");
+  } else if (!/^\d{10}$/.test(address.phone.trim())) {
+    errors.phone("Phone number must be 10 digits.");
+  }
+
+  if (!address.street || address.street.trim() === "") {
+    errors.street("Street is required.");
+  }
+
+  if (!address.city || address.city.trim() === "") {
+    errors.city("City is required.");
+  }
+
+  if (!address.state || address.state.trim() === "") {
+    errors.state("State is required.");
+  }
+
+  if (!address.postalCode || address.postalCode.trim() === "") {
+    errors.postalCode("Postal Code is required.");
+  } else if (!/^\d{4,10}$/.test(address.postalCode.trim())) {
+    errors.postalCode("Postal Code must be 4-10 digits.");
+  }
+
+  if (!address.country || address.country.trim() === "") {
+    errors.country("Country is required.");
+  }
+  setErrors(errors);
+  return Object.keys(errors).length ? errors : null;
 };

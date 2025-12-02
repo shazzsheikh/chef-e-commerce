@@ -2,10 +2,11 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { API } from "../../api/api";
 import ForgetPassword from "./forgetpassword";
+import Loader from "./Loader";
+
 export const Signup = ({ onSuccess }) => {
   const [activetab, setactivetab] = useState("login");
   return (
@@ -52,9 +53,14 @@ function Login({ onSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [forgetPassword, setForgetPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const error = validatelogin(email, password, setErrors);
+    if (error) return;
+    setLoading(true);
     try {
       const res = await API.post("/auth/login", {
         email,
@@ -93,11 +99,10 @@ function Login({ onSuccess }) {
       }
       if (onSuccess) onSuccess(user);
     } catch (error) {
-      console.error(
-        "❌ Submission failed:",
-        error.response?.data || error.message
-      );
-      alert("Something went wrong");
+      console.error(error.response?.data || error.message);
+      alert(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -138,46 +143,59 @@ function Login({ onSuccess }) {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block mb-1 text-sm font-medium">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="m@example.com"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-              required
-            />
+        {loading ? (
+          <Loader />
+        ) : (
+          <div className="">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block mb-1 text-sm font-medium">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="m@example.com"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                  required
+                />
+                {errors.email && (
+                  <p className="text-red-600 text-sm">{errors.email}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block mb-1 text-sm font-medium">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                  required
+                />
+                {errors.password && (
+                  <p className="text-red-600 text-sm">{errors.password}</p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-2 text-white bg-black rounded-lg hover:bg-gray-900 cursor-pointer"
+              >
+                Login
+              </button>
+            </form>
+            <div className="flex justify-center">
+              <button
+                className="mt-4 text-sm text-gray-500 hover:underline hover:text-primary cursor-pointer"
+                onClick={() => setForgetPassword(true)}
+              >
+                Forgot your password?
+              </button>
+            </div>
           </div>
-
-          <div>
-            <label className="block mb-1 text-sm font-medium">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full py-2 text-white bg-black rounded-lg hover:bg-gray-900 cursor-pointer"
-          >
-            Login
-          </button>
-        </form>
-
-        <div className="flex justify-center">
-          <button
-            className="mt-4 text-sm text-gray-500 hover:underline hover:text-primary cursor-pointer"
-            onClick={() => setForgetPassword(true)}
-          >
-            Forgot your password?
-          </button>
-        </div>
+        )}
       </div>
       {/* {forgetPassword && <ForgetPassword />} */}
     </div>
@@ -192,7 +210,8 @@ function SignINForm({ setactivetab }) {
     password: "",
     confirmPassword: "",
   });
-
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -202,16 +221,13 @@ function SignINForm({ setactivetab }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // ✅ Password check pehle karo
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
+    const error = validatesignup(formData, setErrors);
+    if (error) return;
+    setLoading(true);
     const { confirmPassword, ...dataToSend } = formData;
     try {
       const response = await API.post("/auth", dataToSend);
-      console.log("✅ Submitted successfully:", response.data);
+      console.log("✅ Submitted successfully:");
       alert("Account created successfully!");
       setFormData({
         name: "",
@@ -223,11 +239,10 @@ function SignINForm({ setactivetab }) {
 
       setactivetab("login");
     } catch (error) {
-      console.error(
-        "❌ Submission failed:",
-        error.response?.data || error.message
-      );
-      alert("Something went wrong");
+      console.error(error.response?.data || error.message);
+      alert(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -239,81 +254,138 @@ function SignINForm({ setactivetab }) {
           Enter your details to create your account
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-6">
-          <div>
-            <label className="block mb-1 text-sm font-medium">Name</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Divya Bharti"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
-              required
-            />
-          </div>
+        {loading ? (
+          <Loader />
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+            <div>
+              <label className="block mb-1 text-sm font-medium">Name</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Divya Bharti"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
+                required
+              />
+              {errors.name && (
+                <p className="text-red-600 text-sm">{errors.name}</p>
+              )}
+            </div>
 
-          <div>
-            <label className="block mb-1 text-sm font-medium">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="m@example.com"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
-              required
-            />
-          </div>
+            <div>
+              <label className="block mb-1 text-sm font-medium">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="m@example.com"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
+                required
+              />
+              {errors.email && (
+                <p className="text-red-600 text-sm">{errors.email}</p>
+              )}
+            </div>
 
-          <div>
-            <label className="block mb-1 text-sm font-medium">
-              Phone Number
-            </label>
-            <input
-              type="tel"
-              name="phonenumber"
-              value={formData.phonenumber}
-              onChange={handleChange}
-              placeholder="1234567890"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
-              required
-            />
-          </div>
+            <div>
+              <label className="block mb-1 text-sm font-medium">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                name="phonenumber"
+                value={formData.phonenumber}
+                onChange={handleChange}
+                placeholder="1234567890"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
+                required
+              />
+              {errors.phonenumber && (
+                <p className="text-red-600 text-sm">{errors.phonenumber}</p>
+              )}
+            </div>
 
-          <div>
-            <label className="block mb-1 text-sm font-medium">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
-              required
-            />
-          </div>
+            <div>
+              <label className="block mb-1 text-sm font-medium">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
+                required
+              />
+              {errors.password && (
+                <p className="text-red-600 text-sm">{errors.password}</p>
+              )}
+            </div>
 
-          <div>
-            <label className="block mb-1 text-sm font-medium">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full py-2 text-white bg-black rounded-lg hover:bg-gray-900 transition"
-          >
-            Create account
-          </button>
-        </form>
+            <div>
+              <label className="block mb-1 text-sm font-medium">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
+                required
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-600 text-sm">{errors.confirmPassword}</p>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="w-full py-2 text-white bg-black rounded-lg hover:bg-gray-900 transition"
+            >
+              Create account
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
 }
+
+const validatelogin = (email, password, setErrors) => {
+  const errors = {};
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    errors.email = "Invalid email format";
+  }
+  if (password.length < 6) {
+    errors.password = "Password must be at least 6 characters long";
+  }
+
+  setErrors(errors);
+  return Object.keys(errors).length ? errors : null;
+};
+const validatesignup = (formData, setErrors) => {
+  const errors = {};
+  if (!formData.name.trim()) {
+    errors.name = "Name is required";
+  } else if (!/^[A-Za-z\s]+$/.test(formData.name)) {
+    errors.name = "Name cannot contain numbers or special characters";
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formData.email)) {
+    errors.email = "Invalid email format";
+  }
+  const phoneRegex = /^\d{10}$/;
+  if (!phoneRegex.test(formData.phonenumber)) {
+    errors.phonenumber = "Phone number must be 10 digits";
+  }
+  if (formData.password.length < 6) {
+    errors.password = "Password must be at least 6 characters long";
+  }
+  if (formData.password !== formData.confirmPassword) {
+    errors.confirmPassword = "Passwords do not match";
+  }
+  setErrors(errors);
+  return Object.keys(errors).length ? errors : null;
+};

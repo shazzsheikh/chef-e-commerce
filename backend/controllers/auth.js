@@ -122,10 +122,14 @@ exports.Addaddress = async (req, res) => {
   }
 };
 
-// Create a new task
+// Create a new user
 exports.signup = async (req, res) => {
   const { name, email, phonenumber, password, address } = req.body;
   try {
+    const existingUser = await auth.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
     const hash = await bcrypt.hash(password, 10);
     const newSignup = new auth({
       name,
@@ -138,7 +142,7 @@ exports.signup = async (req, res) => {
     res.status(201).json(newSignup);
   } catch (error) {
     res.status(500).json({ message: "Error creating task" });
-    console.error("Error creating task:", error);
+    console.error("Sorry server is not respond", error);
   }
 };
 // Update a task
