@@ -54,7 +54,7 @@ exports.Getitems = async (req, res) => {
       "items.productId"
     );
     if (!usercart) {
-      return res.status(404).json({ message: "cart not found" });
+      return res.status(200).json({ cart: {items: []}});
     }
 
     res.status(200).json({ cart: usercart });

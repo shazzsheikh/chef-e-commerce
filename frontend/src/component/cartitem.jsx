@@ -24,7 +24,12 @@ const CartItem = ({ setopencart }) => {
         },
       });
       const cartdata = res.data.cart;
-
+      if (!cartdata || !cartdata.items || cartdata.items.length === 0) {
+        setItems([]);
+        setQuantities({});
+        // alert("Cart khali hai.");
+        return; //
+      }
       // Map data to local format
       const mappedItems = cartdata.items.map((item) => ({
         id: item.productId._id,
@@ -106,7 +111,7 @@ const CartItem = ({ setopencart }) => {
           },
         });
         // Optionally update cart based on server response if needed
-        console.log("Item removed from backend cart", res.data);
+        // console.log("Item removed from backend cart", res.data);
       } catch (error) {
         console.error("Failed to remove item from cart on server:", error);
         alert("Failed to remove item from cart on server.");

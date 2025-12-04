@@ -16,7 +16,6 @@ export default function SummaryPage() {
   const size = location.state?.size;
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [loadingDone, setLoadingDone] = useState(false);
-
   const [address, setAddress] = useState();
   const [form, setform] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -51,9 +50,19 @@ export default function SummaryPage() {
   }, []);
 
   const navigate = useNavigate();
+  //handleplceorder
   const handlePlaceOrder = async (paymentMethod) => {
-    if (address === null || address === undefined) {
-      alert("Please add address to proceed");
+    if (
+      !address ||
+      !address.fullName ||
+      !address.phone ||
+      !address.street ||
+      !address.city ||
+      !address.state ||
+      !address.postalCode ||
+      !address.country
+    ) {
+      alert("Please fill complete address before placing order");
       return;
     }
     try {
@@ -673,44 +682,45 @@ const Orderconfirm = ({ handlePlaceOrder }) => {
 };
 
 const addressValidation = (address, setErrors) => {
-  const errors = [];
+  const errors = {}; // ✅ object
 
   if (
     !address.fullName?.trim() ||
     address.fullName.trim().length < 2 ||
     /\d|[^a-zA-Z\s]/.test(address.fullName)
-  )
-    errors.fullName(
-      "Full Name least 2 letters, without numbers or special characters."
-    );
+  ) {
+    errors.fullName =
+      "Full Name must be at least 2 letters, without numbers or special characters.";
+  }
 
   if (!address.phone || address.phone.trim() === "") {
-    errors.phone("Phone number is required.");
+    errors.phone = "Phone number is required.";
   } else if (!/^\d{10}$/.test(address.phone.trim())) {
-    errors.phone("Phone number must be 10 digits.");
+    errors.phone = "Phone number must be 10 digits.";
   }
 
   if (!address.street || address.street.trim() === "") {
-    errors.street("Street is required.");
+    errors.street = "Street is required.";
   }
 
   if (!address.city || address.city.trim() === "") {
-    errors.city("City is required.");
+    errors.city = "City is required.";
   }
 
   if (!address.state || address.state.trim() === "") {
-    errors.state("State is required.");
+    errors.state = "State is required.";
   }
 
   if (!address.postalCode || address.postalCode.trim() === "") {
-    errors.postalCode("Postal Code is required.");
+    errors.postalCode = "Postal Code is required.";
   } else if (!/^\d{4,10}$/.test(address.postalCode.trim())) {
-    errors.postalCode("Postal Code must be 4-10 digits.");
+    errors.postalCode = "Postal Code must be 4-10 digits.";
   }
 
   if (!address.country || address.country.trim() === "") {
-    errors.country("Country is required.");
+    errors.country = "Country is required.";
   }
+
   setErrors(errors);
   return Object.keys(errors).length ? errors : null;
 };

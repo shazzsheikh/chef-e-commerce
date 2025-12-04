@@ -20,7 +20,7 @@ const ItemDetails = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [addeditem, setaddeditem] = useState(false);
+  const [addeditem, setaddeditem] = useState(null);
   const token = localStorage.getItem("token");
   const categoryfetch = async (category) => {
     try {
@@ -81,7 +81,7 @@ const ItemDetails = () => {
         );
         alert("cart was succesully add");
         console.log("Cart synced with server:", response.data);
-        setaddeditem(true);
+        setaddeditem(product._id);
       } catch (err) {
         alert("cart was not  add somthing was worng");
         console.error("Error syncing cart:", err.response?.data || err.message);
@@ -136,10 +136,10 @@ const ItemDetails = () => {
             </div>
             <div
               className={`w-full space-y-4 md:p-0 p-2 relative ${
-                addeditem ? "opacity-50" : ""
+                addeditem === product._id ? "opacity-50" : ""
               }`}
             >
-              {addeditem && (
+              {addeditem === product._id && (
                 <div className="absolute top-2 left-2 z-20 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
                   ✔ Added
                 </div>
