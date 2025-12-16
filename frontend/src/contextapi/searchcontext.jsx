@@ -7,17 +7,21 @@ export const useSearch = () => useContext(SearchContext); // custom hook
 
 export const SearchProvider = ({ children }) => {
   const [allProducts, setAllProducts] = useState([]);
+  const [loading, setloading] = useState(true);
   const [query, setQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   // 1️⃣ Fetch all products once
   useEffect(() => {
     const fetchProducts = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       try {
         const res = await API.get("/products/publicshowproducts");
         setAllProducts(res.data);
       } catch (err) {
         console.error("Error fetching products:", err);
+      } finally {
+        setloading(false);
       }
     };
     fetchProducts();
@@ -43,6 +47,7 @@ export const SearchProvider = ({ children }) => {
         query,
         setQuery,
         filteredProducts,
+        loading,
       }}
     >
       {children}

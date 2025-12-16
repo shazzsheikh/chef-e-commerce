@@ -5,6 +5,7 @@ import ImageSliderTailwind from "../component/slider1";
 import { GetInTouch } from "../component/get_in_touch";
 import { Testimonial } from "@/component/testimonial";
 import { useSearch } from "@/contextapi/searchcontext";
+import Loader from "@/component/Loader";
 
 const banner = [
   {
@@ -27,7 +28,11 @@ const banner = [
   },
 ];
 const Home = () => {
-  const { allProducts: products } = useSearch();
+  const { allProducts: products, loading } = useSearch();
+
+  // if (loading) {
+  //   return <Loader />;
+  // }
   // const [products, setProducts] = useState({});
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -44,39 +49,44 @@ const Home = () => {
     <>
       <div className="md:space-y-6 space-y-2">
         <HeroBanner />
-        {products.all && (
-          <ImageSliderTailwind
-            products={products.all}
-            title="Grab latest"
-            showNavigation={false}
-            autoplay={true}
-          />
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            {products.all && (
+              <ImageSliderTailwind
+                products={products.all}
+                title="Grab latest"
+                showNavigation={false}
+                autoplay={true}
+              />
+            )}
+            {products["chef-coat"] && (
+              <ImageSliderTailwind
+                products={products["chef-coat"]}
+                title="Grab the best deal best"
+                showNavigation={true}
+                autoplay={false}
+              />
+            )}
+            {products.shirt && (
+              <ImageSliderTailwind
+                products={products.shirt}
+                title="Grab the best deal shirts"
+                showNavigation={true}
+                autoplay={false}
+              />
+            )}
+            {products.pant && (
+              <ImageSliderTailwind
+                products={products.pant}
+                title="Grab the best deal pants"
+                showNavigation={true}
+                autoplay={false}
+              />
+            )}
+          </>
         )}
-        {products["chef-coat"] && (
-          <ImageSliderTailwind
-            products={products["chef-coat"]}
-            title="Grab the best deal best"
-            showNavigation={true}
-            autoplay={false}
-          />
-        )}
-        {products.shirt && (
-          <ImageSliderTailwind
-            products={products.shirt}
-            title="Grab the best deal shirts"
-            showNavigation={true}
-            autoplay={false}
-          />
-        )}
-        {products.pant && (
-          <ImageSliderTailwind
-            products={products.pant}
-            title="Grab the best deal pants"
-            showNavigation={true}
-            autoplay={false}
-          />
-        )}
-
         <section className="bg-[#F2F2F2]/60 md:py-6 py-3 px-4">
           <h2 className="md:text-4xl text-2xl font-bold text-gray-700 border-b-4 border-primary pb-1 mx-auto text-center mb-6 w-fit">
             Discount on <span className="text-primary">products</span>
