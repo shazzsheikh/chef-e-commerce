@@ -22,10 +22,10 @@ const ItemDetails = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [addeditem, setaddeditem] = useState(null);
   const token = localStorage.getItem("token");
+
   const categoryfetch = async (category) => {
     try {
       const response = await API.get(`/products/category/${category}`);
-      console.log("Products by category:", response.data);
       setRelatedProducts(response.data);
     } catch (error) {
       console.error("Error fetching products by category:", error);
@@ -57,8 +57,6 @@ const ItemDetails = () => {
       alert("Please select a size first!");
       return;
     }
-
-    console.log("addtocard button was clicked");
     if (token) {
       const itemsforbackend = [
         {

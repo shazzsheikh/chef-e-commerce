@@ -66,7 +66,6 @@ function Login({ onSuccess }) {
         email,
         password,
       });
-      console.log("✅ Submitted successfully:", res.data);
       alert("Login successfully!");
       setEmail("");
       setPassword("");

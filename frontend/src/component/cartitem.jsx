@@ -94,7 +94,6 @@ const CartItem = ({ setopencart }) => {
         item.id === id ? { ...item, quantity: newQuantity } : item
       );
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-      console.log("📝 Quantity updated in localStorage", updatedCart);
     }
   };
 
