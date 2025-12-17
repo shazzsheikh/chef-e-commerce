@@ -13,23 +13,29 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import Loader from "@/component/Loader";
 
 const ItemDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
-  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedSize, setSelectedSize] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
   const [addeditem, setaddeditem] = useState(null);
+  // const [relatedLoading, setRelatedLoading] = useState(true);
   const token = localStorage.getItem("token");
 
   const categoryfetch = async (category) => {
     try {
+      // setRelatedLoading(true);
       const response = await API.get(`/products/category/${category}`);
       setRelatedProducts(response.data);
     } catch (error) {
       console.error("Error fetching products by category:", error);
     }
+    // finally {
+    //   setRelatedLoading(false);
+    // }
   };
   useEffect(() => {
     const fetchById = async () => {
@@ -66,19 +72,19 @@ const ItemDetails = () => {
         },
       ];
       try {
-        const response = await API.post(
+        await API.post(
           "/cart/setitems",
           {
             items: itemsforbackend,
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`, // 👈 Token must be sent
+              Authorization: `Bearer ${token}`, //  Token must be sent
             },
           }
         );
-        alert("cart was succesully add");
-        console.log("Cart synced with server:", response.data);
+        // alert("cart was succesully add");
+        // console.log("Cart synced with server:", response.data);
         setaddeditem(product._id);
       } catch (err) {
         alert("cart was not  add somthing was worng");
@@ -86,13 +92,14 @@ const ItemDetails = () => {
       }
     } else {
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const existing = cart.findIndex((item) => item.id === product._id);
-
+      const existing = cart.findIndex(
+        (item) => item._id === product._id && item.size === selectedSize
+      );
       if (existing >= 0) {
         cart[existing].quantity += 1;
       } else {
         cart.push({
-          id: product._id,
+          _id: product._id,
           name: product.name,
           price: product.price,
           img: product.image[0],
@@ -102,13 +109,13 @@ const ItemDetails = () => {
       }
       // Cart ko wapas localStorage mein save karo
       localStorage.setItem("cart", JSON.stringify(cart));
-      setaddeditem(true);
+      setaddeditem(product._id);
     }
   };
 
   const navigate = useNavigate();
   if (!product) {
-    return <div className="p-4 text-center">Loading product details...</div>;
+    return <Loader />;
   }
   return (
     <>
