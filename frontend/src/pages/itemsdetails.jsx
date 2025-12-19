@@ -99,7 +99,7 @@ const ItemDetails = () => {
         cart[existing].quantity += 1;
       } else {
         cart.push({
-          _id: product._id,
+          id: product._id,
           name: product.name,
           price: product.price,
           img: product.image[0],

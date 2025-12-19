@@ -488,11 +488,11 @@ const AddressForm = ({ setform, fetchAddress, selectedAddress }) => {
         alert("User not found in localStorage");
         return;
       }
-      const res = await API.patch(`/auth/user/${userId}/address`, {
+    await API.patch(`/auth/user/${userId}/address`, {
         address: formData,
       });
-      console.log("Server response:", res.data);
-      alert("Address added successfully!");
+      // console.log("Server response:", res.data);
+      // alert("Address added successfully!");
       setFormData({
         fullName: "",
         phone: "",

@@ -77,7 +77,7 @@ function Login({ onSuccess }) {
       const cartData = localStorage.getItem("cart");
       if (cartData && JSON.parse(cartData).length > 0) {
         const usercart = JSON.parse(cartData).map((item) => ({
-          productId: item._id,
+          productId: item.id,
           quantity: item.quantity,
           size: item.size,
         })); // convert string to objec

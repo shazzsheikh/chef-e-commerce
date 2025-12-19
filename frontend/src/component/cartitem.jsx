@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 const CartItem = ({ setopencart }) => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
   const [items, setItems] = useState(() => {
     const savedCart = localStorage.getItem("cart");
     return savedCart ? JSON.parse(savedCart) : [];
   });
-  const token = localStorage.getItem("token");
 
   const [quantities, setQuantities] = useState(() =>
     items.reduce((acc, item) => {
@@ -60,7 +60,6 @@ const CartItem = ({ setopencart }) => {
   }, []);
 
   const updateQuantity = async (id, newQuantity) => {
-    // Prevent going below 1
     if (newQuantity < 1) return;
 
     const updatedItems = items.map((item) =>
@@ -104,7 +103,7 @@ const CartItem = ({ setopencart }) => {
     if (token) {
       try {
         // Use backticks for template literals!
-        const res = await API.delete(`/cart/deleteitem/${id}`, {
+        await API.delete(`/cart/deleteitem/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`, // send token in headers
           },
