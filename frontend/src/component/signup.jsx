@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { API } from "../../api/api";
 import ForgetPassword from "./forgetpassword";
 import Loader from "./Loader";
+import toast from "react-hot-toast";
 
 export const Signup = ({ onSuccess }) => {
   const [activetab, setactivetab] = useState("login");
@@ -66,7 +67,7 @@ function Login({ onSuccess }) {
         email,
         password,
       });
-      alert("Login successfully!");
+      toast.success("Login successfully!");
       setEmail("");
       setPassword("");
       const { token, user } = res.data;
@@ -76,7 +77,7 @@ function Login({ onSuccess }) {
       const cartData = localStorage.getItem("cart");
       if (cartData && JSON.parse(cartData).length > 0) {
         const usercart = JSON.parse(cartData).map((item) => ({
-          productId: item.id,
+          productId: item._id,
           quantity: item.quantity,
           size: item.size,
         })); // convert string to objec
@@ -225,9 +226,8 @@ function SignINForm({ setactivetab }) {
     setLoading(true);
     const { confirmPassword, ...dataToSend } = formData;
     try {
-      const response = await API.post("/auth", dataToSend);
-      console.log("✅ Submitted successfully:");
-      alert("Account created successfully!");
+      await API.post("/auth", dataToSend);
+      toast.success("Account Created successful! Please login.");
       setFormData({
         name: "",
         email: "",

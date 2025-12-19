@@ -19,7 +19,7 @@ const ItemDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
-  const [selectedSize, setSelectedSize] = useState({});
+  const [selectedSize, setSelectedSize] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [addeditem, setaddeditem] = useState(null);
   // const [relatedLoading, setRelatedLoading] = useState(true);
@@ -103,6 +103,7 @@ const ItemDetails = () => {
           name: product.name,
           price: product.price,
           img: product.image[0],
+          color: product.color,
           size: selectedSize,
           quantity: 1,
         });
@@ -217,19 +218,20 @@ const ItemDetails = () => {
             <div className="py-3 px-2 border rounded mb-6">
               <h3 className="md:text-3xl">Select size</h3>
               <div className="flex gap-2 flex-wrap mt-2">
-                {product.size.map((size, index) => (
-                  <button
-                    key={index}
-                    className={`px-4 py-2 border rounded transition cursor-pointer ${
-                      selectedSize === size
-                        ? "bg-green-600 text-white"
-                        : "hover:bg-gray-100"
-                    }`}
-                    onClick={() => setSelectedSize(size)}
-                  >
-                    {size}
-                  </button>
-                ))}
+                {Array.isArray(product.size) &&
+                  product.size.map((size, index) => (
+                    <button
+                      key={index}
+                      className={`px-4 py-2 border rounded transition cursor-pointer ${
+                        selectedSize === size
+                          ? "bg-green-600 text-white"
+                          : "hover:bg-gray-100"
+                      }`}
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      {size}
+                    </button>
+                  ))}
               </div>
             </div>
 

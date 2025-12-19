@@ -69,16 +69,14 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Profile updated:", formData);
     // Add API call here
     try {
-      const response = await API.patch(`/user/profile/${userId}`, formData, {
+      await API.patch(`/user/profile/${userId}`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       toast.success("Profile updated successfully!");
-      console.log("Profile updated successfully:", response.data);
     } catch (error) {
       toast.error("Failed to update profile.");
       console.error("Failed to update profile:", error);
