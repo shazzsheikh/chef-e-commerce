@@ -32,7 +32,6 @@ export const Myorder = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setorderproducts(prob.data.orders);
-      console.log(prob.data.orders);
     } catch (error) {
       console.error("Error fetching products:", error);
     }

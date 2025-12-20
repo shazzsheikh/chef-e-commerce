@@ -82,7 +82,7 @@ function Login({ onSuccess }) {
           size: item.size,
         })); // convert string to objec
         try {
-          const res = await API.post(
+          await API.post(
             "/cart/setitems",
             { items: usercart }, // Payload
             {
@@ -91,7 +91,6 @@ function Login({ onSuccess }) {
               },
             }
           );
-          console.log("Send data successfully", res);
           localStorage.removeItem("cart");
         } catch (err) {
           console.error("Error sending cart data:", err);

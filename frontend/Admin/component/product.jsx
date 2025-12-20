@@ -8,6 +8,7 @@ const ProductManager = () => {
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [localproducts, setlocalproducts] = useState([]);
+  const [editProduct, setEditProduct] = useState(null);
   const filteredlocalproducts = localproducts.filter((p) =>
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -31,7 +32,11 @@ const ProductManager = () => {
     const view = localproducts.find((prev) => prev._id === id);
     setSelectedProduct(view);
   };
-  const handleedit = async (id) => {};
+  const handleedit = async (id) => {
+    const productToEdit = localproducts.find((p) => p._id === id);
+    setEditProduct(productToEdit);
+    setShowForm(true);
+  };
   const handledelete = async (id) => {
     try {
       const res = await API.delete(`/products/${id}`, {
@@ -76,6 +81,8 @@ const ProductManager = () => {
           <ProductForm
             setShowForm={setShowForm}
             setlocalproducts={setlocalproducts}
+            editProduct={editProduct}
+            setEditProduct={setEditProduct}
           />
         )}
       </div>

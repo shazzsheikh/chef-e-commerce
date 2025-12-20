@@ -38,7 +38,6 @@ exports.Addproducts = async (req, res) => {
       productdetails,
       specification,
     });
-    // Step 3: Save to DB
     const savedProduct = await newProduct.save();
     res.status(201).json({
       success: true,
@@ -50,6 +49,66 @@ exports.Addproducts = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to add product",
+      error: error.message,
+    });
+  }
+};
+
+exports.Updateproducts = async (req, res) => {
+  const { id } = req.params;
+  const {
+    name,
+    price,
+    description,
+    clothType,
+    brand,
+    quantity,
+    category,
+    color,
+    material,
+    status,
+  } = req.body;
+
+  try {
+    const size = JSON.parse(req.body.size || "[]");
+    const productdetails = JSON.parse(req.body.productdetails || "[]");
+    const specification = JSON.parse(req.body.specification || "[]");
+    
+    const image = Array.isArray(req.files)
+      ? req.files.map((file) => file.path)
+      : [];
+
+    const updatedProduct = await product.findByIdAndUpdate(
+      id,
+      {
+        name,
+        price,
+        description,
+        image: image.length > 0 ? image : undefined, // Only update if images are provided
+        clothType,
+        brand,
+        size: size.length > 0 ? size : undefined, // Only update if sizes are provided
+        quantity: quantity !== undefined ? quantity : undefined, // Only update if quantity is provided
+        category: category !== undefined ? category : undefined, // Only update if category is provided
+        color: color !== undefined ? color : undefined, // Only update if color is provided
+        material: material !== undefined ? material : undefined, // Only update if material is provided
+        status: status !== undefined ? status : undefined, // Only update if status is provided
+        productdetails: productdetails.length > 0 ? productdetails : undefined, // Only update if product details are provided
+        specification: specification.length > 0 ? specification : undefined, // Only update if specifications are provided
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    console.error("Error while updating product:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update product",
       error: error.message,
     });
   }
