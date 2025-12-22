@@ -188,7 +188,6 @@ exports.Deleteproduct = async (req, res) => {
         const public_id = `mamta/${filename}`;
         try {
           const result = await cloudinary.uploader.destroy(public_id);
-          console.log(`🗑️ Deleted: ${public_id}`, result);
         } catch (error) {
           console.error(`❌ Error deleting ${public_id}:`, error);
         }
