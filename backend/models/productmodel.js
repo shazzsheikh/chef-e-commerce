@@ -50,7 +50,7 @@ const productSchema = new mongoose.Schema(
       default: [],
     },
 
-    quantity: {
+    quantity: { //stock available
       type: Number,
       required:true,
       default: 0,
@@ -90,5 +90,10 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Indexes for optimizing queries
+productSchema.index({ createdAt: -1 });// For sorting by creation date
+productSchema.index({ clothType: 1 });
+productSchema.index({ status: 1 });
 
 module.exports = mongoose.model("Product", productSchema);

@@ -116,8 +116,17 @@ exports.Updateproducts = async (req, res) => {
 
 exports.Adminshowproducts = async (req, res) => {
   try {
+    // const page = Number(req.query.page) || 1;
+    // const limit = Number(req.query.limit) || 20;   
+    //  const skip = (page - 1) * limit;
     const products = await product.find().sort({ createdAt: -1 });
-    res.status(200).json(products);
+    // .skip(skip).limit(limit);
+    //total count for pagination if needed
+    const total = await product.countDocuments();
+    // const totalPages = Math.ceil(total / limit);
+    // res.status(200).json({ products, total, page, totalPages });
+    res.status(200).json({ products, total });
+    
   } catch (error) {
     console.error("error fetching products", error);
     res.status(500).json({ message: "server error" });
@@ -127,26 +136,17 @@ exports.Adminshowproducts = async (req, res) => {
 exports.Publicshowproducts = async (req, res) => {
   try {
     const productsall = await product
-      .find()
-      .select("name price image clothType size")
+      .find({ status: "active" }, "name price image clothType size")
       .sort({ createdAt: -1 });
-    //all categaries nikala
-    const categories = await product.distinct("clothType");
-    // result mein find kr liya filer ke hisab se
-    const result = await Promise.all(
-      categories.map((cat) =>
-        product
-          .find({ clothType: cat })
-          .select("name price image clothType size")
-          .sort({ createdAt: -1 })
-      )
-    );
-    // data mein json mein store krenge sare product
-    const data = {
-      all: productsall,
-    };
-    categories.forEach((cat, index) => {
-      data[cat] = result[index];
+
+      const data = {all: []};
+    //all categaries nikala data phle
+      productsall.forEach((p) => {
+      data.all.push(p);
+      if (!data[p.clothType]) {
+        data[p.clothType] = [];
+      }
+      data[p.clothType].push(p);
     });
     res.status(200).json(data);
   } catch (error) {

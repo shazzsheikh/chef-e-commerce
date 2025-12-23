@@ -1,39 +1,43 @@
 import React, { useState } from "react";
 import { ProductForm } from "./productform";
 import { API } from "../../api/api";
-import { useEffect } from "react";
+// import { useEffect } from "react";
+import { useAdmin } from "../admincontextapi/productfetch";
 const ProductManager = () => {
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const token = localStorage.getItem("admintoken");
+  const { products, setProducts } = useAdmin();
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [localproducts, setlocalproducts] = useState([]);
+  // const [localproducts, setlocalproducts] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
-  const filteredlocalproducts = localproducts.filter((p) =>
+
+  const filteredlocalproducts = products.filter((p) =>
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const prob = await API.get("/products/adminshowproducts", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setlocalproducts(prob.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-    fetchData();
-  }, []);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const prob = await API.get("/products/adminshowproducts", {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+  //       setlocalproducts(prob.data);
+  //     } catch (error) {
+  //       console.error("Error fetching products:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   const handleview = async (id) => {
-    const view = localproducts.find((prev) => prev._id === id);
+    const view = products.find((prev) => prev._id === id);
     setSelectedProduct(view);
   };
   const handleedit = async (id) => {
-    const productToEdit = localproducts.find((p) => p._id === id);
+    const productToEdit = products.find((p) => p._id === id);
     setEditProduct(productToEdit);
     setShowForm(true);
   };
@@ -46,7 +50,7 @@ const ProductManager = () => {
       });
       if (res.data.success) {
         alert("Product deleted successfully ✅");
-        setlocalproducts((prev) => prev.filter((prod) => prod._id !== id));
+        setProducts((prev) => prev.filter((prod) => prod._id !== id));
       } else {
         alert("failed to delete product");
       }
@@ -80,7 +84,7 @@ const ProductManager = () => {
         {showForm && (
           <ProductForm
             setShowForm={setShowForm}
-            setlocalproducts={setlocalproducts}
+            setlocalproducts={setProducts}
             editProduct={editProduct}
             setEditProduct={setEditProduct}
           />
@@ -99,6 +103,7 @@ const ProductManager = () => {
                 <th className="p-2 border">Size</th>
                 <th className="p-2 border">Color</th>
                 <th className="p-2 border">Status</th>
+                <th className="p-2 border">Quantity</th>
                 <th className="p-2 border">Action</th>
               </tr>
             </thead>
@@ -130,6 +135,7 @@ const ProductManager = () => {
                   >
                     {prod.status}
                   </td>
+                  <td className="border p-2">{prod.quantity}</td>
                   <td className="border">
                     <div className="flex p-2 space-x-0.5 justify-center">
                       <button

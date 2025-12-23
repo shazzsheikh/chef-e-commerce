@@ -1,6 +1,15 @@
+import { useAdmin } from "../admincontextapi/productfetch";
 import DashboardChart from "../component/dashboard";
-
 const UserDashboard = () => {
+  const { products = [], totalProducts } = useAdmin();
+
+  let activeProducts = 0;
+  let inactiveProducts = 0;
+  products.forEach((p) => {
+    if (p.status === "active") activeProducts++;
+    else if (p.status === "inactive") inactiveProducts++;
+  });
+
   // Dummy chart data
   const chartData = [
     { name: "Mon", sales: 1000, users: 200 },
@@ -12,21 +21,54 @@ const UserDashboard = () => {
     { name: "Sun", sales: 1900, users: 350 },
   ];
 
-  // Dummy summary data
   const summaryData = [
     {
-      label: "Pending",
+      label: "Total Products",
+      value: totalProducts || 0,
+      color: "bg-blue-100",
+      text: "text-green-600",
+    },
+    {
+      label: "Active products",
+      value: activeProducts || 0,
+      color: "bg-blue-100",
+      text: "text-green-600",
+    },
+    {
+      label: "Not Active products",
+      value: inactiveProducts || 0,
+      color: "bg-blue-100",
+      text: "text-green-600",
+    },
+    {
+      label: "Pending Orders",
       value: 12,
       color: "bg-yellow-100",
       text: "text-yellow-600",
     },
-    { label: "Shipped", value: 8, color: "bg-blue-100", text: "text-blue-600" },
-    { label: "Cancelled", value: 3, color: "bg-red-100", text: "text-red-600" },
     {
-      label: "Delivered",
+      label: "Shipped Orders",
+      value: 8,
+      color: "bg-blue-100",
+      text: "text-blue-600",
+    },
+    {
+      label: "Delivered Orders",
       value: 25,
       color: "bg-green-100",
       text: "text-green-600",
+    },
+    {
+      label: "Cancelled Orders",
+      value: 3,
+      color: "bg-red-100",
+      text: "text-red-600",
+    },
+    {
+      label: "Total Orders",
+      value: 3,
+      color: "bg-red-100",
+      text: "text-red-600",
     },
   ];
 
