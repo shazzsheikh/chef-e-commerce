@@ -39,7 +39,7 @@ app.use("/api/products", require("./routes/products.js"));
 app.use("/api/cart", usertokenverify, require("./routes/cart.js"));
 
 app.use("/api/order", usertokenverify, require("./routes/order.js"));
-
+app.use("/api/admin", usertokenverify, require("./routes/admin.js"));
 app.use("/api/getintouch", require("./routes/getintouch.js"));
 const PORT = process.env.PORT || 3000;
 connectDB().then(() => {

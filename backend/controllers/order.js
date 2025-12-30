@@ -35,15 +35,19 @@ exports.Getorder = async (req, res) => {
     const id = req.user.userId || req.user.adminId || req.user.id;
     const admin = req.user.role === "admin";
     let orders;
+    let totalorder = 0;
     if (admin) {
       orders = await order
         .find()
         .sort({ createdAt: -1 })
-        .populate("userId", "name email phonenumber address");
+        .populate("userId", "name email phonenumber address")
+        .lean();
+        totalorder = await order.countDocuments();
     } else {
-      orders = await order.find({ userId: id }).sort({ createdAt: -1 });
+      orders = await order.find({ userId: id }).sort({ createdAt: -1 }).lean();    
+      totalorder = await order.countDocuments({ userId: id });
     }
-    return res.status(200).json({ orders });
+    return res.status(200).json({ orders, totalorder });
   } catch (error) {
     console.error("Error fetching orders:", error);
     return res.status(500).json({ message: "Server error" });

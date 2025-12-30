@@ -31,6 +31,8 @@ import SearchProduct from "./component/serachproduct";
 import BulkOrder from "./pages/bulkorder";
 import Faq from "./pages/faq";
 import EditProfile from "./pages/editprofile";
+import Settings from "../Admin/component/setting";
+import Testimonial from "../Admin/component/testimonial";
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -115,6 +117,8 @@ const AppRoutes = () => {
             <Route path="products" element={<ProductManager />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="getintouch" element={<Touch />} />
+            <Route path="setting" element={<Settings />} />
+            <Route path="testimonial" element={<Testimonial />} />
           </Route>
         </Route>
 

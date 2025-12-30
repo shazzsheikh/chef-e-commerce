@@ -8,7 +8,6 @@ export default function Layout({ children }) {
     <AdminProvider>
       <SidebarProvider>
         <AppSidebar />
-
         <main className="w-full">
           <SidebarTrigger />
           <Header />

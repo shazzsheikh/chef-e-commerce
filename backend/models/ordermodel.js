@@ -58,4 +58,9 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
+// For querying orders by status and sorting by creation date
+orderSchema.index({ userId: 1, createdAt: -1 });
+orderSchema.index({ status: 1, createdAt: -1 });
+orderSchema.index({ createdAt: -1 });
+
 module.exports = mongoose.model("Order", orderSchema);

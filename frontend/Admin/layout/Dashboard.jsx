@@ -1,13 +1,23 @@
 import { useAdmin } from "../admincontextapi/productfetch";
 import DashboardChart from "../component/dashboard";
 const UserDashboard = () => {
-  const { products = [], totalProducts } = useAdmin();
+  const { products = [], totalProducts, orders, totalOrders } = useAdmin();
+  let pendingOrders = 0;
+  let shippedOrders = 0;
+  let deliveredOrders = 0;
+  let cancelledOrders = 0;
+  orders.forEach((order) => {
+    if (order.status === "pending") pendingOrders++;
+    if (order.status === "shipped") shippedOrders++;
+    if (order.status === "delivered") deliveredOrders++;
+    if (order.status === "cancelled") cancelledOrders++;
+  });
 
   let activeProducts = 0;
   let inactiveProducts = 0;
   products.forEach((p) => {
     if (p.status === "active") activeProducts++;
-    else if (p.status === "inactive") inactiveProducts++;
+    else if (p.status === "stop") inactiveProducts++;
   });
 
   // Dummy chart data
@@ -25,50 +35,50 @@ const UserDashboard = () => {
     {
       label: "Total Products",
       value: totalProducts || 0,
-      color: "bg-blue-100",
-      text: "text-green-600",
+      color: "bg-blue-50",
+      text: "text-blue-700",
     },
     {
-      label: "Active products",
+      label: "Active Products",
       value: activeProducts || 0,
-      color: "bg-blue-100",
-      text: "text-green-600",
+      color: "bg-green-50",
+      text: "text-green-700",
     },
     {
-      label: "Not Active products",
+      label: "Inactive Products",
       value: inactiveProducts || 0,
-      color: "bg-blue-100",
-      text: "text-green-600",
+      color: "bg-gray-100",
+      text: "text-gray-700",
     },
     {
       label: "Pending Orders",
-      value: 12,
-      color: "bg-yellow-100",
-      text: "text-yellow-600",
+      value: pendingOrders || 0,
+      color: "bg-yellow-50",
+      text: "text-yellow-700",
     },
     {
       label: "Shipped Orders",
-      value: 8,
-      color: "bg-blue-100",
-      text: "text-blue-600",
+      value: shippedOrders || 0,
+      color: "bg-indigo-50",
+      text: "text-indigo-700",
     },
     {
       label: "Delivered Orders",
-      value: 25,
-      color: "bg-green-100",
-      text: "text-green-600",
+      value: deliveredOrders || 0,
+      color: "bg-emerald-50",
+      text: "text-emerald-700",
     },
     {
       label: "Cancelled Orders",
-      value: 3,
-      color: "bg-red-100",
-      text: "text-red-600",
+      value: cancelledOrders || 0,
+      color: "bg-red-50",
+      text: "text-red-700",
     },
     {
       label: "Total Orders",
-      value: 3,
-      color: "bg-red-100",
-      text: "text-red-600",
+      value: totalOrders || 0,
+      color: "bg-slate-100",
+      text: "text-slate-800",
     },
   ];
 

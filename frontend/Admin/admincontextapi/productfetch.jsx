@@ -8,7 +8,8 @@ export const AdminProvider = ({ children }) => {
   const token = localStorage.getItem("admintoken");
   const [products, setProducts] = useState([]);
   const [totalProducts, setTotalProducts] = useState(0);
-  //   const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [totalOrders, setTotalOrders] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const fetchAdminData = async () => {
@@ -18,12 +19,13 @@ export const AdminProvider = ({ children }) => {
       const prodRes = await API.get("/products/adminshowproducts", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      //   const orderRes = await API.get("/orders/admin", {
-      //     headers: { Authorization: `Bearer ${token}` },
-      //   });
+      const orderRes = await API.get("/order", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setProducts(prodRes.data.products);
       setTotalProducts(prodRes.data.total);
-      //   setOrders(orderRes.data);
+      setOrders(orderRes.data.orders);
+      setTotalOrders(orderRes.data.totalorder);
     } catch (err) {
       console.error(err);
     } finally {
@@ -41,6 +43,9 @@ export const AdminProvider = ({ children }) => {
         products,
         totalProducts,
         loading,
+        orders,
+        setOrders,
+        totalOrders,
         setProducts,
         fetchAdminData,
       }}

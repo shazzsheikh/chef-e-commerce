@@ -31,7 +31,6 @@ export default function Adminlogin() {
         password,
       });
       alert("successfully login");
-      console.log("data", res.data);
       if (res.data.admintoken) {
         localStorage.setItem("admintoken", res.data.admintoken);
         localStorage.setItem("adminname", res.data.admin.name);

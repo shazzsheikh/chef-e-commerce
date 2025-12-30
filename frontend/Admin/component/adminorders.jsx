@@ -1,32 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { API } from "../../api/api";
+import { useAdmin } from "../admincontextapi/productfetch";
 
 export const AdminOrders = () => {
+  const { orders, setOrders } = useAdmin();
   const [selectedStatus, setSelectedStatus] = useState(""); // "" = All
-  const [orders, setlocalproducts] = useState([]);
+  // const [orders, setOrders] = useState([]);
   const filteredOrders = selectedStatus
     ? orders.filter((order) => order.status === selectedStatus)
     : orders;
   const token = localStorage.getItem("admintoken");
-  const fetchorders = async () => {
-    try {
-      const prob = await API.get("/order", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setlocalproducts(prob.data.orders);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-  useEffect(() => {
-    fetchorders();
-  }, []);
+
+  // const fetchorders = async () => {
+  //   try {
+  //     const prob = await API.get("/order", {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     setlocalproducts(prob.data.orders);
+  //   } catch (error) {
+  //     console.error("Error fetching products:", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchorders();
+  // }, []);
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      const res = await API.put(
+      await API.put(
         `/order/${orderId}/status`, // Make sure this route exists in backend
         { status: newStatus },
         {
@@ -37,13 +40,13 @@ export const AdminOrders = () => {
       );
 
       // Update local state if needed:
-      // setlocalproducts((prevOrders) =>
-      //   prevOrders.map((ord) =>
-      //     ord._id.toString() === orderId.toString()
-      //       ? { ...ord, status: newStatus }
-      //       : ord
-      //   )
-      // );
+      setOrders((prevOrders) =>
+        prevOrders.map((ord) =>
+          ord._id.toString() === orderId.toString()
+            ? { ...ord, status: newStatus }
+            : ord
+        )
+      );
       alert("updated succsuflly");
     } catch (err) {
       console.error("Error updating status:", err);

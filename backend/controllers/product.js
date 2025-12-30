@@ -126,7 +126,7 @@ exports.Adminshowproducts = async (req, res) => {
     // const totalPages = Math.ceil(total / limit);
     // res.status(200).json({ products, total, page, totalPages });
     res.status(200).json({ products, total });
-    
+
   } catch (error) {
     console.error("error fetching products", error);
     res.status(500).json({ message: "server error" });
@@ -212,8 +212,7 @@ exports.Categoryfilter = async (req, res) => {
   const { category } = req.params;
   try {
     const productsByCategory = await product
-      .find({ clothType: category })
-      .select("name price image clothType size")
+      .find({ clothType: category, status: "active" }, "name price image clothType size")
       .sort({ createdAt: -1 });
     res.status(200).json(productsByCategory);
   } catch (error) {
